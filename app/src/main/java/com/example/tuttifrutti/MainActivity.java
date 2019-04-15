@@ -1,7 +1,9 @@
 package com.example.tuttifrutti;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     //TODO: (1) Create a welcome screen with Tutti Frutti logo
@@ -13,5 +15,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    /** Navigation to Login Activity */
+    public void nav_LoginActivity( View view) {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 }
