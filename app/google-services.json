@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "315842410681",
+    "firebase_url": "https://tuttifrutti1-93a9e.firebaseio.com",
+    "project_id": "tuttifrutti1-93a9e",
+    "storage_bucket": "tuttifrutti1-93a9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315842410681:android:5d956f4ea6e0dd4e",
+        "android_client_info": {
+          "package_name": "com.example.tuttifrutti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315842410681-na85ken1d8ql2ce3g7ohn1ucss69jiqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tuttifrutti",
+            "certificate_hash": "640bc14fdc9517dad644d5603ad29c04c3d4754b"
+          }
+        },
+        {
+          "client_id": "315842410681-b4pcvomuacem5elqo6btn7qlq6k0516g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLG8tHcFYs9oy4-3tqgDTObam5GQvssg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315842410681-b4pcvomuacem5elqo6btn7qlq6k0516g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
