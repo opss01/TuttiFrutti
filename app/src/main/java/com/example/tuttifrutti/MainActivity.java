@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         //COMPLETED_TODO: (3) If the user is logged in, send him to GameSetup screen.
                         //COMPLETED_TODO: (4) If the user is not logged in, send him to LoginActivity
-                        if (GameUtils.isLoggedIn()) {
+                        if (GameUtils.isLoggedIn(MainActivity.this)) {
                             Context ctx = MainActivity.this;
                             Intent intent = new Intent(ctx, GameSetup.class);
                             startActivity(intent);
