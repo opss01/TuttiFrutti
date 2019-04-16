@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-    //TODO: (1) Create a welcome screen with Tutti Frutti logo
-    //TODO: (2) Add a button to enter the application
-    //TODO: (3) If the user is logged in, send him to GameSetup screen. If the user is not logged in, send him to GameSetup
+    //TODO: (1) Create a welcome screen with Tutti Frutti logo - Done
+    //TODO: (2) Add a button to enter the application - Done
+    //TODO: (3) If the user is logged in, send him to GameSetup screen. If the user is not logged in, send him to GameSetup - Still In Progress.
 
 
     @Override
