@@ -3,6 +3,7 @@ package com.example.tuttifrutti;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -136,6 +137,14 @@ public class LoginActivity extends AppCompatActivity
     }
         
     private void updateUI(Object o) {
+        Context ctx = this;
+        Intent intent = new Intent (ctx, GameSetup.class);
+        String name = "Player 1";
+        if (o.getClass().equals(GoogleSignInAccount.class)) {
+            name = ((GoogleSignInAccount) o).getDisplayName();
+        }
+        intent.putExtra(Intent.EXTRA_TEXT, name);
+        startActivity(intent);
     }
 
 }
