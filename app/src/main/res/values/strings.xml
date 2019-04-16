@@ -13,6 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="enter_here">Enter Here</string>
     <string name="start_button">Start a New Game</string>
     <string name="logo_description">Tutti Frutti Game Logo</string>
 </resources>

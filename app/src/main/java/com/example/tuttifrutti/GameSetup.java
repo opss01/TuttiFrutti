@@ -9,7 +9,6 @@ public class GameSetup extends AppCompatActivity {
     //TODO: Create an action that pulls a list of players for a game
     //TODO: Send players to PlayGame activity
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
