@@ -92,9 +92,17 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.sign_in_button) {
-            Intent intent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(intent, RC_SIGN_IN);
+        int flag=0;
+        //if (v.getId() == R.id.sign_in_button) {
+           Intent intent = mGoogleSignInClient.getSignInIntent();
+           while(flag==0){ try {
+                startActivityForResult(intent, RC_SIGN_IN);
+                flag=1;
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
         }
 
     }
@@ -132,19 +140,26 @@ public class LoginActivity extends AppCompatActivity
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            //updateUI(null);
         }
     }
         
     private void updateUI(Object o) {
         Context ctx = this;
         Intent intent = new Intent (ctx, GameSetup.class);
+        if(o==null)
+        {recreate();}
         String name = "Player 1";
-        if (o.getClass().equals(GoogleSignInAccount.class)) {
-            name = ((GoogleSignInAccount) o).getDisplayName();
-        }
-        intent.putExtra(Intent.EXTRA_TEXT, name);
-        startActivity(intent);
+
+            if (o.getClass().equals(GoogleSignInAccount.class)) {
+                name = ((GoogleSignInAccount) o).getDisplayName();
+                intent.putExtra(Intent.EXTRA_TEXT, name);
+                startActivity(intent);
+                //TODO: Send the account details over to fire base and check whether the database gets the user details
+            }
+            else {
+                recreate();
+            }
     }
 
 }
