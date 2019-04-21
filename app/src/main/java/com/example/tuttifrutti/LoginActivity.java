@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.tuttifrutti.gameutils.GameUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,7 +42,13 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +59,15 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity
-        implements View.OnClickListener {
+        implements OnClickListener {
     //COMPLETED_TODO: Set up this screen to work with googlePlay credentials.
     //TODO: Upon authentication, send user to GameSetup screen
-
     /* Google Sign In Fields */
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount mGoogleSignInAccount;
-
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
+    //View to Sign In (Google)
     TextView signInView;
 
     private static int RC_SIGN_IN = 9001;
@@ -78,15 +86,17 @@ public class LoginActivity extends AppCompatActivity
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        signInView = findViewById(R.id.sign_in_view);
 
-        signInView = (TextView) findViewById(R.id.sign_in_view);
-
+        // [END initialize_auth]
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        signInButton.setOnClickListener(this);
-
+        signInButton.setOnClickListener( this);
+// Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -153,6 +163,32 @@ public class LoginActivity extends AppCompatActivity
 
             if (o.getClass().equals(GoogleSignInAccount.class)) {
                 name = ((GoogleSignInAccount) o).getDisplayName();
+
+                /****** Send credentials to Firebase  */
+                AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
+                mAuth.signInWithCredential(credential)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithCredential:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    //updateUI(user);
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                    //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                                    //updateUI(null);
+                                }
+
+                                // [START_EXCLUDE]
+                               // hideProgressDialog();
+                                // [END_EXCLUDE]
+                            }
+                        });
+                /****** End credentials to Firebase  */
+
                 intent.putExtra(Intent.EXTRA_TEXT, name);
                 startActivity(intent);
                 //TODO: Send the account details over to fire base and check whether the database gets the user details
