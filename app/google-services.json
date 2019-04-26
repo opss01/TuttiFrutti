@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "315842410681-sdebfnhiqfp2okol1vq7lath7brl8jhh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tuttifrutti",
+            "certificate_hash": "8899786d10db4be017920a61a58b4ca444c31520"
+          }
+        },
+        {
+          "client_id": "315842410681-e33vgel2jqva5s20ps81fmn8fbe95bmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tuttifrutti",
+            "certificate_hash": "a5904c0f3ef6ba15118899c367b68776d62ed490"
+          }
+        },
+        {
           "client_id": "315842410681-b4pcvomuacem5elqo6btn7qlq6k0516g.apps.googleusercontent.com",
           "client_type": 3
         }
