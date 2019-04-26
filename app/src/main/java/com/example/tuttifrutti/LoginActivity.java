@@ -129,6 +129,8 @@ public class LoginActivity extends AppCompatActivity
         //updateUI (account);
 
         super.onStart();
+
+        updateUI(mGoogleSignInAccount);
     }
 
     @Override
@@ -160,7 +162,7 @@ public class LoginActivity extends AppCompatActivity
         
     private void updateUI(GoogleSignInAccount o) {
         Context ctx = this;
-        Intent intent = new Intent (ctx, GameSetup.class);
+        Intent intent = new Intent (ctx, PlayGame.class);
         if(o==null)
         {recreate();}
         String name = "Player 1";

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                         //COMPLETED_TODO: (4) If the user is not logged in, send him to LoginActivity
                         if (GameUtils.isLoggedIn( MainActivity.this )) {
                             Context ctx = MainActivity.this;
-                            Intent intent = new Intent( ctx, GameSetup.class );
+                            Intent intent = new Intent( ctx, PlayGame.class );
                             startActivity( intent );
                         } else {
                             Context ctx = MainActivity.this;
