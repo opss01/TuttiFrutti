@@ -43,6 +43,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -52,8 +53,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 /**
  * A login screen that offers login via email/password.
@@ -61,12 +64,12 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity
         implements OnClickListener {
     //COMPLETED_TODO: Set up this screen to work with googlePlay credentials.
-    //TODO: Upon authentication, send user to GameSetup screen
+    //COMPLETED_TODO: Upon authentication, send user to GameSetup screen
     /* Google Sign In Fields */
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount mGoogleSignInAccount;
     // [START declare_auth]
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     //View to Sign In (Google)
     TextView signInView;
 
@@ -81,6 +84,7 @@ public class LoginActivity extends AppCompatActivity
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -96,7 +100,7 @@ public class LoginActivity extends AppCompatActivity
 
         signInButton.setOnClickListener( this);
 // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = getInstance();
 
     }
 
@@ -154,7 +158,7 @@ public class LoginActivity extends AppCompatActivity
         }
     }
         
-    private void updateUI(Object o) {
+    private void updateUI(GoogleSignInAccount o) {
         Context ctx = this;
         Intent intent = new Intent (ctx, GameSetup.class);
         if(o==null)
@@ -162,36 +166,29 @@ public class LoginActivity extends AppCompatActivity
         String name = "Player 1";
 
             if (o.getClass().equals(GoogleSignInAccount.class)) {
-                name = ((GoogleSignInAccount) o).getDisplayName();
+                name = o.getDisplayName();
 
-                /****** Send credentials to Firebase  */
-                AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
-                mAuth.signInWithCredential(credential)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                /* Send credentials to Firebase  */
+                AuthCredential credential = GoogleAuthProvider.getCredential(o.getIdToken(), null);
+                mAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithCredential:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    //updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                    //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                                    //updateUI(null);
-                                }
 
-                                // [START_EXCLUDE]
-                               // hideProgressDialog();
-                                // [END_EXCLUDE]
+                                }
                             }
                         });
-                /****** End credentials to Firebase  */
-
+                /* End credentials to Firebase  */
                 intent.putExtra(Intent.EXTRA_TEXT, name);
                 startActivity(intent);
-                //TODO: Send the account details over to fire base and check whether the database gets the user details
+                //COMPLETED_TODO: Send the account details over to fire base and check whether the database gets the user details
             }
             else {
                 recreate();
