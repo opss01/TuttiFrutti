@@ -9,6 +9,9 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <meta-data
+        android:name="com.google.android.gms.games.APP_ID"
+        android:value="@string/app_id" />
 
     <application
         android:allowBackup="true"
