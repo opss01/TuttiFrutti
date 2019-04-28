@@ -42,6 +42,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -83,8 +84,10 @@ public class LoginActivity extends AppCompatActivity
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        Log.d(TAG, "Starting Login to GooglePlay...");
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
+                .requestScopes(Games.SCOPE_GAMES_LITE)
                 .requestEmail()
                 .build();
 
@@ -170,6 +173,7 @@ public class LoginActivity extends AppCompatActivity
             if (o.getClass().equals(GoogleSignInAccount.class)) {
                 name = ((GoogleSignInAccount) o).getDisplayName();
 
+                Log.d(TAG, "Logging into firebase.");
                 /* Send credentials to Firebase  */
                 AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
                 mAuth.getInstance().signInWithCredential(credential)
@@ -189,6 +193,7 @@ public class LoginActivity extends AppCompatActivity
                         });
                 /* End credentials to Firebase  */
                 intent.putExtra(Intent.EXTRA_TEXT, name);
+                Log.d(TAG, "Calling PlayGame Intent.");
                 startActivity(intent);
                 //COMPLETED_TODO: Send the account details over to fire base and check whether the database gets the user details
             } else {

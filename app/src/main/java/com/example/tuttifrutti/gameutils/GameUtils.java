@@ -7,6 +7,7 @@ import android.view.View;
 import com.example.tuttifrutti.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +44,7 @@ public class GameUtils {
     public static boolean isLoggedIn(Activity activity) {
         //TODO: Return true if user is logged in
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(activity);
-        if (account == null) {
+        if (account == null || !GoogleSignIn.hasPermissions(account, Games.SCOPE_GAMES_LITE)) {
             return false;
         } else {
             return true;

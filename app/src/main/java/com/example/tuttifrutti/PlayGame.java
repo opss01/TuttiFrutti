@@ -338,6 +338,39 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         }
 
 
+        if (!GoogleSignIn.hasPermissions(mSignedInAccount, Games.SCOPE_GAMES_LITE)) {
+            Log.d(TAG, "User missing SCOPE_GAMES_LITE, initiating silent login.");
+            mGoogleSignInClient.silentSignIn();
+
+            /*
+            mGoogleSignInClient.silentSignIn().addOnCompleteListener(
+                            this,
+                            task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Silent sign in successful.");
+                                } else {
+                                    Log.d(TAG, "Need to sign out and log back in!!");
+                                    mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "Sign Out Success");
+                                            } else {
+                                                handleException(task.getException(), "Sign Out Failed!");
+                                            }
+                                            Context ctx = PlayGame.this;
+                                            Intent intent = new Intent( ctx, LoginActivity.class );
+                                            startActivity( intent );
+                                        }
+                                    });
+                                }
+                            });
+                            */
+        }
+
+
+
         //Set up the game clients
         mRealTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(this, mSignedInAccount);
         mInvitationsClient = Games.getInvitationsClient(PlayGame.this, mSignedInAccount);
