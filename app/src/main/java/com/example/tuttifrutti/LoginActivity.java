@@ -130,11 +130,15 @@ public class LoginActivity extends AppCompatActivity
         // the GoogleSignInAccount will be non-null.
         mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
         //updateUI (account);
+        if (GoogleSignIn.hasPermissions(mGoogleSignInAccount, Games.SCOPE_GAMES_LITE)) {
+            super.onStart();
+            updateUI(mGoogleSignInAccount);
+        }
+        else {
+            super.onStart();
+        }
 
-        super.onStart();
-
-        updateUI(mGoogleSignInAccount);
-    }
+            }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -175,6 +179,7 @@ public class LoginActivity extends AppCompatActivity
 
                 Log.d(TAG, "Logging into firebase.");
                 /* Send credentials to Firebase  */
+                /*
                 AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
                 mAuth.getInstance().signInWithCredential(credential)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
