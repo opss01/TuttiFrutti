@@ -86,7 +86,8 @@ public class LoginActivity extends AppCompatActivity
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         Log.d(TAG, "Starting Login to GooglePlay...");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                //.requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.oAuth_client_id))
                 .requestScopes(Games.SCOPE_GAMES_LITE)
                 .requestEmail()
                 .build();
@@ -109,9 +110,17 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        int flag=0;
-        //if (v.getId() == R.id.sign_in_button) {
-           Intent intent = mGoogleSignInClient.getSignInIntent();
+        //int flag=0;
+        if (v.getId() == R.id.sign_in_button) {
+            Intent intent = mGoogleSignInClient.getSignInIntent();
+            Log.d(TAG, "Launching the sign in dialog.");
+            try {
+                startActivityForResult(intent, RC_SIGN_IN);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+           /*
            while(flag==0){ try {
                 startActivityForResult(intent, RC_SIGN_IN);
                 flag=1;
@@ -121,7 +130,9 @@ public class LoginActivity extends AppCompatActivity
                 continue;
             }
         }
+        */
 
+        }
     }
 
     @Override
@@ -129,7 +140,7 @@ public class LoginActivity extends AppCompatActivity
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        //updateUI (account);
+
         if (GoogleSignIn.hasPermissions(mGoogleSignInAccount, Games.SCOPE_GAMES_LITE)) {
             super.onStart();
             updateUI(mGoogleSignInAccount);
