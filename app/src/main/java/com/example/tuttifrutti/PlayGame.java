@@ -328,6 +328,16 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mSignedInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
+        if (GoogleSignIn.hasPermissions(mSignedInAccount, Games.SCOPE_GAMES_LITE)) {
+//            onSignIn(mSignedInAccount);
+            Log.w(TAG, "testing" + mSignedInAccount.getDisplayName());
+        }
+        else
+        {
+            GoogleSignIn.getClient(this, gso).getSignInIntent();
+        }
+
+
         //Set up the game clients
         mRealTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(this, mSignedInAccount);
         mInvitationsClient = Games.getInvitationsClient(PlayGame.this, mSignedInAccount);

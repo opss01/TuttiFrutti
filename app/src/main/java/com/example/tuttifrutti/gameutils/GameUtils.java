@@ -2,18 +2,23 @@ package com.example.tuttifrutti.gameutils;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
+import com.example.tuttifrutti.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,12 +72,10 @@ public class GameUtils {
 
     Note: There is some checks in case the list is empty etc.
      */
-    public static List<String>  getCollectionFieldValues (String c, final String f) throws InterruptedException {
+    public List<String>  getCollectionFieldValues(String c, final String f) throws InterruptedException {
 
         db = (FirebaseFirestore) dbSetup(); //There may be a synchronization issue.
-
           Task<QuerySnapshot> mtask=  db.collection( c ).get();
-
 //          mtask.addOnSuccessListener( new OnSuccessListener(null){
 //              public void onSuccess(Task<QuerySnapshot> task )  {
 //                  List<String> fieldValues = new ArrayList<>();
@@ -94,37 +97,66 @@ public class GameUtils {
 //     ;
         boolean a = false;
 
-                   a = mtask.addOnCompleteListener( new OnCompleteListener<QuerySnapshot>() {
+        a = mtask.addOnCompleteListener( new OnCompleteListener<QuerySnapshot>() {
 
 
-                        @Override
-                        public void onComplete ( @NonNull Task<QuerySnapshot> task ) {
-                            List<String> fieldValues = new ArrayList<>();
+            @Override
+            public void onComplete ( @NonNull Task<QuerySnapshot> task ) {
+            List<String> fieldValues = new ArrayList<>();
 
-                            Log.d( TAG, "onComplete" );
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d( TAG, document.getId() + " => " + document.get( f ) );
-//                                DocumentSnapshot documentCat = task.getResult();
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                    fieldAdds( (String) document.get( f ) );
+            Log.d( TAG, "onComplete" );
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Log.d( TAG, document.getId() + " => " + document.get( f ) );
+            //                                DocumentSnapshot documentCat = task.getResult();
+            //                                Log.d(TAG, document.getId() + " => " + document.getData());
+                    fieldAdds( (String) document.get( f ) );
+                }
+            } else {
+                Log.w( TAG, "Error getting documents.", task.getException() );
+            }
+            }
+        } ).isSuccessful();
 
-
-                                }
-                            } else {
-                                Log.w( TAG, "Error getting documents.", task.getException() );
-                            }
-                        }
-                    } ).isSuccessful();
-//
-//        while(!a)
-//        {
-//
-//        }
 
         return new ArrayList (new HashSet(fieldValues));
     }
 
+    public static List<String>  getCollectionFieldValues2 (String c, final String f) throws InterruptedException {
+
+        db = (FirebaseFirestore) dbSetup();
+        Source source = Source.SERVER;
+        CollectionReference coll = db.collection("categories");
+        Query query = coll.whereEqualTo("category",true);
+        Task<QuerySnapshot> t = query.get(source);
+        Log.d(TAG, "Testing2 : "+ query.get() + " => ");
+        //showLoading();
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete( Task<QuerySnapshot> task) {
+                Log.d(TAG,"Testing2: OnComplete");
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, "Testing2 : "+ document.getId() + " => " + document.toString() + "--" + document.getId());
+//
+                    }
+                }
+                else
+                {
+                    Log.d(TAG,"Testing2: Not Succesful");
+                }
+                //hideLoading();
+            }
+        });
+//        if (t.isSuccessful()) {
+//        for (QueryDocumentSnapshot document : t.getResult()) {
+//            Log.d(TAG, "Testing2 : "+ document.getId() + " => " + document.getData());
+////            fieldAdds( (String) document.get( f ) );
+//        }
+//        }
+        Log.w(TAG,"Testing2 : out of loop" + query.get(source));
+        return new ArrayList (new HashSet(fieldValues));
+    }
     private static void fieldAdds(String f)
     {
         fieldValues.add(f);

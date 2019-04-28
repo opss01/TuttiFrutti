@@ -61,20 +61,20 @@ public class MainActivity extends AppCompatActivity {
         // Testing Database
 //        List<String> allCats = null;
 //        try {
-//            allCats = GameUtils.getCollectionFieldValues( "categories", "category" );
+//            allCats = GameUtils.getCollectionFieldValues2( "categories", "category" );
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
 //        List<String> someCats = GameUtils.getSomeCategories( allCats, 2 );
 //        Log.w( TAG, "outofTestingIn in cities" + allCats );
 //        Log.w( TAG, "outofTestingIn in cities" + someCats );
-        // Testing of Game Initial and Random Letters setup.
+//        // Testing of Game Initial and Random Letters setup.
 //        GameUtils.gameInitialSetup();
 //
 //        for (int i = 0 ; i < 22; i++) {
 //            Log.w( TAG, "TestingRandom: " + GameUtils.randomLetter() );
 //        }
-
+//
     }
 
     /** Navigation to Login Activity */

@@ -160,20 +160,20 @@ public class LoginActivity extends AppCompatActivity
         }
     }
         
-    private void updateUI(GoogleSignInAccount o) {
+    private void updateUI(@NonNull Object o) {
         Context ctx = this;
         Intent intent = new Intent (ctx, PlayGame.class);
-        if(o==null)
-        {recreate();}
+//        if(o==null)
+//        {recreate();}
         String name = "Player 1";
-
+        if(o!=null) {
             if (o.getClass().equals(GoogleSignInAccount.class)) {
-                name = o.getDisplayName();
+                name = ((GoogleSignInAccount) o).getDisplayName();
 
                 /* Send credentials to Firebase  */
-                AuthCredential credential = GoogleAuthProvider.getCredential(o.getIdToken(), null);
+                AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
                 mAuth.getInstance().signInWithCredential(credential)
-                        .addOnCompleteListener( this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -191,10 +191,10 @@ public class LoginActivity extends AppCompatActivity
                 intent.putExtra(Intent.EXTRA_TEXT, name);
                 startActivity(intent);
                 //COMPLETED_TODO: Send the account details over to fire base and check whether the database gets the user details
-            }
-            else {
+            } else {
                 recreate();
             }
+        }
     }
 
 }
