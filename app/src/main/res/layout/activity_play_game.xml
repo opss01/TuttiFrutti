@@ -37,7 +37,7 @@
             android:background="@drawable/button_bkgrnd_enter"
             android:text="@string/invite_friends"
             android:textColor="#FFFFFF" />
-
+<!--
         <Button
             android:id="@+id/quick_game_button"
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:background="@drawable/button_bkgrnd_enter"
             android:text="@string/quick_game"
             android:textColor="#FFFFFF" />
-
+-->
         <Button
             android:id="@+id/check_invitations"
             android:layout_width="match_parent"
@@ -100,6 +100,8 @@
     </LinearLayout>
 
     <!-- GAMEPLAY SCREEN -->
+    <!-- TODO: Make this pretty -->
+
     <LinearLayout
         android:id="@+id/screen_game"
         android:layout_width="match_parent"
@@ -114,24 +116,42 @@
        -->
 
         <TextView
+            android:id="@+id/magic_letter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text=""
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:id="@+id/category1"
+            android:layout_width="100dp"
+            android:layout_height="30dp" />
+
+        <EditText
+            android:id="@+id/fill_in_words1"
+            android:layout_width="match_parent"
+            android:layout_height="119dp"
+            android:layout_marginLeft="-165dp"
+            android:layout_marginTop="130dp" />
+
+        <EditText
+            android:id="@+id/fill_in_words2"
+            android:layout_width="match_parent"
+            android:layout_height="115dp"
+            android:layout_marginLeft="-400dp"
+            android:layout_marginTop="240dp" />
+
+        <TextView
+            android:id="@+id/category2"
+            android:layout_width="100dp"
+            android:layout_height="30dp" />
+
+        <TextView
             android:id="@+id/countdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/magic_letter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/fill_in_words1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/fill_in_words2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
 
     </LinearLayout>

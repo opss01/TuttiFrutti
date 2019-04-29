@@ -37,6 +37,9 @@ public class GameUtils {
     private static FirebaseFirestore db = null;
     static List<String> fieldValues = new ArrayList<>();
 
+    private final static char firstLetterOfAlphabet = 'A';
+    private final static int numLettersInAlphabet = 26;
+
 
 //    GameUtils(FirebaseFirestore db) {
 //        this.db = db;
@@ -176,6 +179,9 @@ Note: There is some checks in case the list is empty etc.
         Collections.shuffle(fList);
         return fList.subList(0, n);
     }
+
+    /* TODO: Clean up */
+    /*
     static List<Character> sequence = new ArrayList<>();
     public static void gameInitialSetup (){
 
@@ -185,10 +191,11 @@ Note: There is some checks in case the list is empty etc.
         Collections.shuffle(sequence);
         return;
     }
+    */
     public static char randomLetter (){
         Random r = new Random();
-        int nextRand = r.nextInt(sequence.size());
-
-        return sequence.remove( nextRand );
+        int nextRand = r.nextInt(numLettersInAlphabet);
+        return (char) (firstLetterOfAlphabet + nextRand);
+        //return sequence.remove( nextRand );
     }
 }

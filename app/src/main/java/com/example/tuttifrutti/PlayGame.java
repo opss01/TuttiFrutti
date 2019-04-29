@@ -52,11 +52,10 @@ import java.util.List;
 
 public class PlayGame extends AppCompatActivity implements View.OnClickListener {
     //COMPLETED_TODO: For the players established, set up a game
-    //TODO: Connect to database
-    //TODO: Set up categories based on what's in the database (we only have two)
+    //TODO: Connect to database to get categories (through GameUtils)
     //TODO: Set up communications (chat box)
-    //TODO: Allow users to fill in two EditBoxes, containing a delimited list of animals/places?
-    //TODO: Keep a timer
+    //COMPLETED_TODO: Allow users to fill in two EditBoxes, containing a delimited list of a category?
+    //COMPLETED_TODO: Keep a timer
     //TODO: When timer runs out, EvaluateResponses
     //TODO: Send to GetResults (pass the content of the editboxes)
 
@@ -97,7 +96,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     // Types are: Score_Final(S), Score_Update(U); The second and third bytes contain the score
     // TODO: Think about how message is structured. Add the ability to transmit game messages.
 
-    Button bStartQuickGame;
+    //Button bStartQuickGame;
     Button bCheckInvites;
     Button bSignOut;
     Button bInviteFriends;
@@ -140,13 +139,13 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         @Override
         public void onPeerInvitedToRoom(@Nullable Room room, @NonNull List<String> list) {
-            //TODO: Implement allowing users to connect to friends, onPeerInvitedToRoom
+            //COMPLETED_TODO: Implement allowing users to connect to friends, onPeerInvitedToRoom
             updateRoom(room);
         }
 
         @Override
         public void onPeerDeclined(@Nullable Room room, @NonNull List<String> list) {
-            //TODO: Implement allowing users to connect to friends, method onPeerDeclined
+            //COMPLETED_TODO: Implement allowing users to connect to friends, method onPeerDeclined
             updateRoom(room);
         }
 
@@ -175,7 +174,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             mParticipants = room.getParticipants();
             mMyId = room.getParticipantId(mPlayerId);
 
-            // save room ID if its not initialized in onRoomCreated()
+        // save room ID if its not initialized in onRoomCreated()
             if (mRoomId == null) {
                 mRoomId = room.getRoomId();
             }
@@ -184,6 +183,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             Log.d(TAG, "<< CONNECTED TO ROOM>>");
             Log.d(TAG, "Room ID: " + mRoomId);
             Log.d(TAG, "My ID " + mMyId);
+
+            startGame();
         }
 
         @Override
@@ -205,14 +206,13 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         @Override
         public void onP2PConnected(@NonNull String s) {
-            //TODO: What are my supposed to do here?
         }
 
         @Override
         public void onP2PDisconnected(@NonNull String s) {
-            //TODO: What are my supposed to do here?
         }
         void updateRoom(Room room) {
+            Log.d(TAG, "updateRoom");
             if (room != null) {
                 mParticipants = room.getParticipants();
             }
@@ -335,13 +335,13 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
 
-        bStartQuickGame = findViewById(R.id.quick_game_button);
+        //bStartQuickGame = findViewById(R.id.quick_game_button);
         bCheckInvites = findViewById(R.id.check_invitations);
         bSignOut = findViewById(R.id.sign_out);
         bInviteFriends = findViewById(R.id.invite_friends);
 
         //Set up the buttons
-        bStartQuickGame.setOnClickListener(this);
+        //bStartQuickGame.setOnClickListener(this);
         bCheckInvites.setOnClickListener(this);
         bSignOut.setOnClickListener(this);
         bInviteFriends.setOnClickListener(this);
@@ -367,43 +367,24 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             GoogleSignIn.getClient(this, gso).getSignInIntent();
         }
 
-
-        if (!GoogleSignIn.hasPermissions(mSignedInAccount, Games.SCOPE_GAMES_LITE)) {
-            Log.d(TAG, "User missing SCOPE_GAMES_LITE, initiating silent login.");
-            mGoogleSignInClient.silentSignIn();
-
-            /*
-            mGoogleSignInClient.silentSignIn().addOnCompleteListener(
-                            this,
-                            task -> {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "Silent sign in successful.");
-                                } else {
-                                    Log.d(TAG, "Need to sign out and log back in!!");
-                                    mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "Sign Out Success");
-                                            } else {
-                                                handleException(task.getException(), "Sign Out Failed!");
-                                            }
-                                            Context ctx = PlayGame.this;
-                                            Intent intent = new Intent( ctx, LoginActivity.class );
-                                            startActivity( intent );
-                                        }
-                                    });
-                                }
-                            });
-                            */
-        }
-
-
-
         //Set up the game clients
         mRealTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(this, mSignedInAccount);
         mInvitationsClient = Games.getInvitationsClient(PlayGame.this, mSignedInAccount);
+
+        //Get Player ID
+        // get the playerId from the PlayersClient
+        PlayersClient playersClient = Games.getPlayersClient(PlayGame.this, mSignedInAccount);
+        playersClient.getCurrentPlayer()
+                .addOnSuccessListener(new OnSuccessListener<Player>() {
+                    @Override
+                    public void onSuccess(Player player) {
+                        mPlayerId = player.getPlayerId();
+
+                        switchToScreen(R.id.screen_main);
+                    }
+                })
+                .addOnFailureListener(createFailureListener("There was a problem getting the player id!"));
+
 
         //Finally, go to the main screen
         switchToScreen(R.id.screen_main);
@@ -413,10 +394,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            /*
             case R.id.quick_game_button: {
                 Log.d(TAG, "Let's start a quick game.");
                 startQuickGame();
             }
+            */
             case R.id.invite_friends: {
                 switchToScreen(R.id.screen_wait);
 
@@ -466,7 +449,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
-
+/* TODO: Delete this method */
+    /*
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
         Log.d(TAG, "onConnected(): connected to Google APIs");
         if (mSignedInAccount != googleSignInAccount) {
@@ -517,9 +501,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
                 })
                 .addOnFailureListener(createFailureListener("There was a problem getting the activation hint!"));
     }
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d(TAG, "onActivityResult");
 
         if (requestCode == RC_SELECT_PLAYERS) {
             // we got the result from the "select players" UI -- ready to create the room
@@ -535,7 +520,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             if (resultCode == Activity.RESULT_OK) {
                 // ready to start playing
                 Log.d(TAG, "Starting game (waiting room returned OK).");
-                startGame(true);
+                startGame();
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player indicated that they want to leave the room
                 leaveRoom();
@@ -555,17 +540,6 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         // and MAX_OPPONENTS to 1. Set the role to te only role for this game.
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(1, 1, ROLE_ANY);
 
-/*
-        // show list of invitable players
-        mRealTimeMultiplayerClient.getSelectOpponentsIntent(1, 1).addOnSuccessListener(
-                new OnSuccessListener<Intent>() {
-                    @Override
-                    public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, RC_SELECT_PLAYERS);
-                    }
-                }
-        ).addOnFailureListener(createFailureListener("There was a problem selecting opponents."));
-*/
         // build the room config:
         RoomConfig roomConfig =
                 RoomConfig.builder(mRoomUpdateCallback)
@@ -590,7 +564,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     // Accept an invitation.
     void acceptInviteToRoom(String invitationId) {
-        //TODO: FIX THIS acceptInviteToRoom
+        //COMPLETED_TODO: FIX THIS acceptInviteToRoom
 
         // accept invitation
         Log.d(TAG, "Accepting invitation: " + invitationId);
@@ -604,6 +578,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         switchToScreen(R.id.screen_wait);
         // prevent screen from sleeping during handshake
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        resetGameVars();
 
         mRealTimeMultiplayerClient.join(mRoomConfig)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -657,7 +632,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
      * "Invite friends" button. We react by creating a room with those players.
      */
     private void handleSelectPlayersResult(int response, Intent data) {
-        //TODO: Implement player selection
+        //COMPLETED_TODO: Implement player selection
         if (response != Activity.RESULT_OK) {
             Log.w(TAG, "*** select players UI cancelled, " + response);
             switchToScreen(R.id.screen_main);
@@ -753,11 +728,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void updateGame() {
-        //TODO: Implement updateScores
+        //TODO: Implement updateScores and messages
     }
 
     void broadcastMessage() {
-        //TODO: Implement broadcasting of messages between players
+        //TODO: Implement broadcasting of messages between players? Is this redundant with updateGame
     }
 
 
@@ -771,8 +746,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     /* Game Play implemented here */
-    void startGame(boolean multiplayer) {
+    void startGame() {
 
+        Log.d(TAG, "startGame");
         /*Set up game*/
         resetGameVars();
         switchToScreen(R.id.screen_game);
@@ -781,9 +757,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.fill_in_words2).setVisibility(View.VISIBLE);
         findViewById(R.id.magic_letter).setVisibility(View.VISIBLE);
 
+        Log.d(TAG, "Setting magic letter ...");
         mMagicLetter = findViewById(R.id.magic_letter);
-        mMagicLetter.setText(GameUtils.randomLetter());
+        mMagicLetter.setText(String.valueOf(GameUtils.randomLetter()));
 
+        Log.d(TAG, "Setting up counter ...");
         // run the gameTick() method every second to update the game.
         final Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -800,8 +778,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     /* Game tick -- update countdown, check if game ended. */
     void gameTick() {
+        Log.v(TAG, "gameTick: " + mSecondsLeft);
         if (mSecondsLeft > 0) {
            --mSecondsLeft;
+
         }
 
         // update countdown
