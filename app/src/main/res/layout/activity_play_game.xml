@@ -117,42 +117,55 @@
 
         <TextView
             android:id="@+id/magic_letter"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text=""
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="-20dp"
+            android:text=""
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/category2"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="-30dp"
+            android:layout_marginTop="250dp" />
 
         <TextView
             android:id="@+id/category1"
             android:layout_width="100dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:layout_marginLeft="-140dp"
+            android:layout_marginTop="40dp" />
 
         <EditText
             android:id="@+id/fill_in_words1"
             android:layout_width="match_parent"
             android:layout_height="119dp"
-            android:layout_marginLeft="-165dp"
-            android:layout_marginTop="130dp" />
+            android:layout_marginLeft="-105dp"
+            android:layout_marginTop="110dp"
+            android:baselineAligned="true" />
+
+        <EditText
+            android:id="@+id/message_box"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:layout_marginLeft="-390dp"
+            android:layout_marginTop="500dp"
+            android:baselineAligned="false" />
 
         <EditText
             android:id="@+id/fill_in_words2"
-            android:layout_width="match_parent"
+            android:layout_width="367dp"
             android:layout_height="115dp"
-            android:layout_marginLeft="-400dp"
-            android:layout_marginTop="240dp" />
-
-        <TextView
-            android:id="@+id/category2"
-            android:layout_width="100dp"
-            android:layout_height="30dp" />
+            android:layout_marginLeft="-390dp"
+            android:layout_marginTop="340dp"
+            android:baselineAligned="false" />
 
         <TextView
             android:id="@+id/countdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
 
     </LinearLayout>
 

@@ -180,18 +180,15 @@ Note: There is some checks in case the list is empty etc.
         return fList.subList(0, n);
     }
 
-    /* TODO: Clean up */
-    /*
-    static List<Character> sequence = new ArrayList<>();
-    public static void gameInitialSetup (){
-
-        for (char c = 'A' ; c <= 'Z' ; c++) {
-            sequence.add(c);
-        }
-        Collections.shuffle(sequence);
-        return;
+    /* Returns n number of categories based on whatever is in the database */
+    public static List<String> getRandomCategories (int n) {
+        //TODO: Implement getRandomCategories
+        ArrayList<String> holdValues = new ArrayList<String> ();
+        holdValues.add("Animals");
+        holdValues.add("Places");
+        return (holdValues);
     }
-    */
+
     public static char randomLetter (){
         Random r = new Random();
         int nextRand = r.nextInt(numLettersInAlphabet);

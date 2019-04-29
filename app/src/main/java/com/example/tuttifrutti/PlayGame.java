@@ -76,6 +76,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     RoomConfig mRoomConfig;
     String mRoomId = null;
 
+    int numberOfCategories = 2;
+    List<String> categories = null;
+    TextView mCategory1 = null;
+    TextView mCategory2 = null;
+
     // The participants in the current game
     ArrayList<Participant> mParticipants = null;
     // My participant ID in the currently active game
@@ -92,9 +97,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     String mIncomingInvitationId = null;
 
     // Message buffer for sending messages
-    byte[] mMsgBuf = new byte[3]; //2 byte messages, the first byte tells you what type of message
-    // Types are: Score_Final(S), Score_Update(U); The second and third bytes contain the score
-    // TODO: Think about how message is structured. Add the ability to transmit game messages.
+    byte[] mMsgBuf = new byte[128]; //
+    // Structure: Byte[1] tells us the type of message; F=Final Score, M=Message
+    // For F, byte 2 contains the other player's score
+    // For M, bytes 2-128, it's a message
+    // TODO: (Ready for Testing) Think about how message is structured. Add the ability to transmit game messages.
 
     //Button bStartQuickGame;
     Button bCheckInvites;
@@ -105,10 +112,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     EditText mFillInWords2;
 
     private String mPlayerId;
+    private int currentPlayerScore = 0;
+    private int otherPlayerScore = 0;
 
     // Current state of the game:
     int mSecondsLeft = -1; // how long until the game ends (seconds)
-    final static int GAME_DURATION = 30; // game duration, seconds.
+    final static int GAME_DURATION = 120; // game duration, seconds.
     int mScore = 0; // user's current score
 
 
@@ -724,11 +733,11 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void showResults() {
-        //TODO: Send user to results screen
+        //TODO: Calculate scores and send user to results screen
     }
 
     void updateGame() {
-        //TODO: Implement updateScores and messages
+        //TODO: Implement to updateScores and messages
     }
 
     void broadcastMessage() {
@@ -740,6 +749,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     void resetGameVars() {
         mSecondsLeft = GAME_DURATION;
         mScore = 0;
+        categories = GameUtils.getRandomCategories(numberOfCategories);
         //mParticipantScore.clear();
         //mFinishedParticipants.clear();
         //TODO: Implement scoring
@@ -756,6 +766,17 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.fill_in_words1).setVisibility(View.VISIBLE);
         findViewById(R.id.fill_in_words2).setVisibility(View.VISIBLE);
         findViewById(R.id.magic_letter).setVisibility(View.VISIBLE);
+
+        //Set Categories
+        mCategory1 = findViewById(R.id.category1);
+        mCategory2 = findViewById(R.id.category2);
+
+        if (numberOfCategories == categories.size() && numberOfCategories == 2) {
+            mCategory1.setText(categories.get(0));
+            mCategory2.setText(categories.get(1));
+        } else {
+            Log.e(TAG, "Update Implementation of setting categories in startGame!!!");
+        }
 
         Log.d(TAG, "Setting magic letter ...");
         mMagicLetter = findViewById(R.id.magic_letter);
