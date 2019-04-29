@@ -3,6 +3,7 @@ package com.example.tuttifrutti;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,11 +39,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.Player;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -69,6 +73,8 @@ public class LoginActivity extends AppCompatActivity
     /* Google Sign In Fields */
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount mGoogleSignInAccount;
+    GoogleApiClient mApiClient;
+
     // [START declare_auth]
     public FirebaseAuth mAuth;
     //View to Sign In (Google)
@@ -88,7 +94,7 @@ public class LoginActivity extends AppCompatActivity
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
                 //.requestIdToken(getString(R.string.default_web_client_id))
                 .requestIdToken(getString(R.string.oAuth_client_id))
-                .requestScopes(Games.SCOPE_GAMES_LITE)
+                //.requestScopes(Games.SCOPE_GAMES_LITE)
                 .requestEmail()
                 .build();
 
@@ -116,6 +122,10 @@ public class LoginActivity extends AppCompatActivity
             Log.d(TAG, "Launching the sign in dialog.");
             try {
                 startActivityForResult(intent, RC_SIGN_IN);
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+            } catch (ApiException a) {
+                Log.e(TAG, "Sign In Failed!! Code: " + a.getStatusCode());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -155,12 +165,17 @@ public class LoginActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        } else {
+            String msg = result.getStatus().getStatusMessage();
+            Log.e(TAG, msg);
+            new AlertDialog.Builder(this).setMessage(msg).setNeutralButton("OK", null).show();
         }
     }
 
