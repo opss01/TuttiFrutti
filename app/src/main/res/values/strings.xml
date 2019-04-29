@@ -14,8 +14,6 @@
         completions."
     </string>
 
-    <string name="app_id">998166307868</string>
-    <string name="oAuth_client_id">	998166307868-t3d72f2eso6i11orr3i9aqgb6shfsbsm.apps.googleusercontent.com</string>
 
     <string name="logo_description">Tutti Frutti Game Logo</string>
 
@@ -26,6 +24,7 @@
     <string name="sign_out">Sign Out</string>
 
 
+    <string name="invite_friends">Invite Friends</string>
     <string name="incoming_invitation_text">You have invitations!</string>
     <string name="accept_popup_invite">Accept Invitation</string>
 

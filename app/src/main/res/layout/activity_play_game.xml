@@ -14,8 +14,8 @@
         <ImageView
             android:id="@+id/imageViewPlayGame"
             android:layout_width="337dp"
-            android:layout_height="240dp"
-            android:layout_marginStart="15dp"
+            android:layout_height="230dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="6dp"
             android:adjustViewBounds="false"
@@ -29,11 +29,21 @@
             app:srcCompat="@drawable/logo" />
 
         <Button
+            android:id="@+id/invite_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_bkgrnd_enter"
+            android:text="@string/invite_friends"
+            android:textColor="#FFFFFF" />
+
+        <Button
             android:id="@+id/quick_game_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/button_bkgrnd_enter"
             android:text="@string/quick_game"
             android:textColor="#FFFFFF" />
@@ -43,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_bkgrnd_enter"
@@ -55,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_bkgrnd_enter"
@@ -95,11 +105,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--
         <TextView
             android:id="@+id/instructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/instructions" />
+       -->
+
+        <TextView
+            android:id="@+id/countdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/magic_letter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/fill_in_words1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/fill_in_words2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
     </LinearLayout>
 
 

@@ -42,7 +42,7 @@ public class GameUtils {
 //        this.db = db;
 //    }
     public static boolean isLoggedIn(Activity activity) {
-        //TODO: Return true if user is logged in
+        //COMPLETED_TODO: Return true if user is logged in
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(activity);
         if (account == null || !GoogleSignIn.hasPermissions(account, Games.SCOPE_GAMES_LITE)) {
             return false;

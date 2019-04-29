@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity
                 startActivityForResult(intent, RC_SIGN_IN);
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                updateUI(account);
             } catch (ApiException a) {
                 Log.e(TAG, "Sign In Failed!! Code: " + a.getStatusCode());
                 if (GoogleApiAvailability.getInstance() == null) {
@@ -133,19 +134,6 @@ public class LoginActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-           /*
-           while(flag==0){ try {
-                startActivityForResult(intent, RC_SIGN_IN);
-                flag=1;
-            }
-            catch (Exception e)
-            {
-                continue;
-            }
-        }
-        */
-
         }
     }
 

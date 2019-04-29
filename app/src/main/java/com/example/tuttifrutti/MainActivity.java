@@ -25,7 +25,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     //COMPLETED_TODO: (1) Create a welcome screen
     //COMPLETED_TODO: (2) Add a button to enter the application
-    //TODO: (3) If the user is logged in, send him to GameSetup screen. If the user is not logged in, send him to GameSetup - Still In Progress.
+    //COMPLETED_TODO: (3) If the user is logged in, send him to GameSetup screen. If the user is not logged in, send him to GameSetup - Still In Progress.
     //TODO: (Cynthia) Move the database to gameutils
     private static final String TAG = "MainActivity";
     Button enterButton;

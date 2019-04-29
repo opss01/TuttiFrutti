@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <!-- TODO: Replace this entire file with the ids.xml provided from the Google Play Console.
+        <!-- COMPLETED_TODO: Replace this entire file with the ids.xml provided from the Google Play Console.
              NOTE: You can find this file by clicking the `Get Resources` link in
              the Events, Achievements, or Leaderboards menu of the Google Play Console. -->
-        <!--<string name="app_id">315842410681</string> -->
+        <string name="app_id">998166307868</string>
+        <string name="oAuth_client_id">	998166307868-t3d72f2eso6i11orr3i9aqgb6shfsbsm.apps.googleusercontent.com</string>
 
 </resources>

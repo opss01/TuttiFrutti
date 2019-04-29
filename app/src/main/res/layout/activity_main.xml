@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <!-- TODO Add a background image -->
+    <!-- COMPLETED_TODO Add a background image -->
 
     <ImageView
         android:id="@+id/imageView"
