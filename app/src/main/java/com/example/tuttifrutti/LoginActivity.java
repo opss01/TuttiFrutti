@@ -40,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,9 +94,9 @@ public class LoginActivity extends AppCompatActivity
         Log.d(TAG, "Starting Login to GooglePlay...");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
                 //.requestIdToken(getString(R.string.default_web_client_id))
-                .requestIdToken(getString(R.string.oAuth_client_id))
+                //.requestIdToken(getString(R.string.oAuth_client_id))
                 //.requestScopes(Games.SCOPE_GAMES_LITE)
-                .requestEmail()
+                .requestProfile()
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -126,6 +127,9 @@ public class LoginActivity extends AppCompatActivity
                 GoogleSignInAccount account = task.getResult(ApiException.class);
             } catch (ApiException a) {
                 Log.e(TAG, "Sign In Failed!! Code: " + a.getStatusCode());
+                if (GoogleApiAvailability.getInstance() == null) {
+                    Log.e(TAG, "No instance of GooglePlay Api found!");
+                };
             } catch (Exception e) {
                 e.printStackTrace();
             }
