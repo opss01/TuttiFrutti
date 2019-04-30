@@ -246,33 +246,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/message_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:baselineAligned="false" />
 
                 <TextView
                     android:id="@+id/countdown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/message_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:baselineAligned="false" />
+
+                <TextView
+                    android:id="@+id/message_history"
+                    android:layout_width="23dp"
+                    android:layout_height="61dp" />
             </TableRow>
 
         </TableLayout>
 
-
-        <TextView
-            android:id="@+id/message_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/message_box"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_marginLeft="-390dp"
-            android:layout_marginTop="500dp"
-            android:baselineAligned="false" />
 
     </LinearLayout>
 
