@@ -56,6 +56,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PlayGamesAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,7 @@ public class LoginActivity extends AppCompatActivity
 
     // [START declare_auth]
     public FirebaseAuth mAuth;
+
     //View to Sign In (Google)
     TextView signInView;
 
@@ -96,6 +98,7 @@ public class LoginActivity extends AppCompatActivity
                 //.requestIdToken(getString(R.string.default_web_client_id))
                 //.requestIdToken(getString(R.string.oAuth_client_id))
                 //.requestScopes(Games.SCOPE_GAMES_LITE)
+                .requestServerAuthCode(getString(R.string.web_client_id))
                 .requestProfile()
                 .build();
 
@@ -103,15 +106,17 @@ public class LoginActivity extends AppCompatActivity
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         signInView = findViewById(R.id.sign_in_view);
-
+        // Initialize Firebase Auth
+        mAuth = getInstance();
+        FirebaseAuth mAuth;
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         signInButton.setOnClickListener( this);
-// Initialize Firebase Auth
-        mAuth = getInstance();
 
     }
 
@@ -197,23 +202,29 @@ public class LoginActivity extends AppCompatActivity
 
                 Log.d(TAG, "Logging into firebase.");
                 /* Send credentials to Firebase  */
-                /*
-                AuthCredential credential = GoogleAuthProvider.getCredential(((GoogleSignInAccount) o).getIdToken(), null);
-                mAuth.getInstance().signInWithCredential(credential)
+                final FirebaseAuth auth = FirebaseAuth.getInstance();
+                AuthCredential credential = PlayGamesAuthProvider.getCredential(((GoogleSignInAccount) o).getServerAuthCode());
+                auth.signInWithCredential(credential)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithCredential:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    FirebaseUser user = auth.getCurrentUser();
+//                        updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithCredential:failure", task.getException());
-
+//                        Toast.makeText(MainActivity.this, "Authentication failed.",
+//                                Toast.LENGTH_SHORT).show();
+//                        updateUI(null);
                                 }
+
+                                // ...
                             }
                         });
+
                 /* End credentials to Firebase  */
                 intent.putExtra(Intent.EXTRA_TEXT, name);
                 Log.d(TAG, "Calling PlayGame Intent.");

@@ -105,7 +105,8 @@
     <LinearLayout
         android:id="@+id/screen_game"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <!--
         <TextView
@@ -114,58 +115,150 @@
             android:layout_height="wrap_content"
             android:text="@string/instructions" />
        -->
-
         <TextView
-            android:id="@+id/magic_letter"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="-20dp"
-            android:text=""
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/category2"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="-30dp"
-            android:layout_marginTop="250dp" />
-
-        <TextView
-            android:id="@+id/category1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="-140dp"
-            android:layout_marginTop="40dp" />
-
-        <EditText
-            android:id="@+id/fill_in_words1"
+            android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="119dp"
-            android:layout_marginLeft="-105dp"
-            android:layout_marginTop="110dp"
-            android:baselineAligned="true" />
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:text="Fill Each Category with the letter: " />
 
-        <EditText
-            android:id="@+id/message_box"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="79dp"
-            android:layout_marginLeft="-390dp"
-            android:layout_marginTop="500dp"
-            android:baselineAligned="false" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/fill_in_words2"
-            android:layout_width="367dp"
-            android:layout_height="115dp"
-            android:layout_marginLeft="-390dp"
-            android:layout_marginTop="340dp"
-            android:baselineAligned="false" />
+            <TextView
+                android:id="@+id/magic_letter"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="A"
+                android:textAlignment="center"
+                android:textSize="30sp" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/countdown"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="236dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#97f2f3"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/category1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="txt" />
+
+                    <EditText
+                        android:id="@+id/fill_in_words1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:ems="10"
+                        android:inputType="textNoSuggestions"
+                        android:text="Fill" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#F3DDB3"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/category2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="txte" />
+
+                    <EditText
+                        android:id="@+id/fill_in_words2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:ems="10"
+                        android:inputType="textNoSuggestions"
+                        android:text="Fill" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#c1cd97"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_category3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+
+                    <EditText
+                        android:id="@+id/input_category3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textNoSuggestions"
+                        android:text="Fill" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#e18d96"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_category4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+
+                    <EditText
+                        android:id="@+id/input_category4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textNoSuggestions"
+                        android:text="Fill" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/message_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false" />
+
+                <TextView
+                    android:id="@+id/countdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableRow>
+
+        </TableLayout>
+
 
     </LinearLayout>
 

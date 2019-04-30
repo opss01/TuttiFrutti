@@ -1,58 +1,42 @@
 {
   "project_info": {
     "project_number": "998166307868",
-    "firebase_url": "https://tuttifrutti1-93a9e.firebaseio.com",
-    "project_id": "tuttifrutti1-93a9e",
-    "storage_bucket": "tuttifrutti1-93a9e.appspot.com"
+    "firebase_url": "https://tuttifrutti2-23184083.firebaseio.com",
+    "project_id": "tuttifrutti2-23184083",
+    "storage_bucket": "tuttifrutti2-23184083.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:315842410681:android:5d956f4ea6e0dd4e",
+        "mobilesdk_app_id": "1:998166307868:android:5d956f4ea6e0dd4e",
         "android_client_info": {
           "package_name": "com.example.tuttifrutti"
         }
       },
       "oauth_client": [
         {
-          "client_id": "315842410681-na85ken1d8ql2ce3g7ohn1ucss69jiqm.apps.googleusercontent.com",
+          "client_id": "998166307868-t3d72f2eso6i11orr3i9aqgb6shfsbsm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.tuttifrutti",
-            "certificate_hash": "640bc14fdc9517dad644d5603ad29c04c3d4754b"
+            "certificate_hash": "a78e97a2faf38ce4253d6129c08f98c3759c141e"
           }
         },
         {
-          "client_id": "315842410681-sdebfnhiqfp2okol1vq7lath7brl8jhh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.tuttifrutti",
-            "certificate_hash": "8899786d10db4be017920a61a58b4ca444c31520"
-          }
-        },
-        {
-          "client_id": "315842410681-e33vgel2jqva5s20ps81fmn8fbe95bmc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.tuttifrutti",
-            "certificate_hash": "a5904c0f3ef6ba15118899c367b68776d62ed490"
-          }
-        },
-        {
-          "client_id": "315842410681-b4pcvomuacem5elqo6btn7qlq6k0516g.apps.googleusercontent.com",
+          "client_id": "998166307868-u9o0t95ual7sr07kermt2n13vl368m60.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDLG8tHcFYs9oy4-3tqgDTObam5GQvssg4"
+          "current_key": "AIzaSyC8BFwURf-o6sHPCYn5WCz5kncGu9_ZQk4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "315842410681-b4pcvomuacem5elqo6btn7qlq6k0516g.apps.googleusercontent.com",
+              "client_id": "998166307868-u9o0t95ual7sr07kermt2n13vl368m60.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
