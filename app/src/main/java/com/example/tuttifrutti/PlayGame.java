@@ -63,8 +63,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     //COMPLETED_TODO: Set up communications (chat box)
     //COMPLETED_TODO: Allow users to fill in two EditBoxes, containing a delimited list of a category?
     //COMPLETED_TODO: Keep a timer
-    //TODO: (Ready to Test) When timer runs out, EvaluateResponses
-    //TODO: (Ready to Test) Send to GetResults (pass the content of the editboxes)
+    //COMPLETED_TODO: (Ready to Test) When timer runs out, EvaluateResponses
+    //COMPLETED_TODO: (Ready to Test) Send to GetResults (pass the content of the editboxes)
 
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
@@ -149,7 +149,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
                 String msg = new String(Arrays.copyOfRange(buf, 1, buf.length));
                 msgAdapter.add(playerName + ": " + msg + '\n');
             } else if (msgType == scoreMsgType) {
-                //TODO: (Ready to Test) Update Scores
+                //COMPLETED_TODO: (Ready to Test) Update Scores
                 scoreBoard.put(sender, new Integer(mMsgBuf[1]));
                 broadcastScores(); //If we haven't done so already, transmit our score to the other player
             }
@@ -708,7 +708,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void showResults() {
-        //TODO: (Ready to Test) Send user to results screen
+        //COMPLETED_TODO: (Ready to Test) Send user to results screen
         Log.d(TAG, "showResults");
 
         /* TODO: Delete */
@@ -777,7 +777,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void evaluateScore() {
-        //TODO: (Ready to Test) Implement score evaluation
+        //COMPLETED_TODO: (Ready to Test) Implement score evaluation
         Log.d(TAG, "evaluateScore");
         String category1 = mCategory1.getText().toString();
         String category1Response = mFillInWords1.getText().toString();
@@ -794,7 +794,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
      * it will call showResults
      */
     void broadcastScores() {
-        //TODO: (Ready to Test) Implement broadcasting of messages between players? Is this redundant with updateGame
+        //COMPLETED_TODO: (Ready to Test) Implement broadcasting of messages between players? Is this redundant with updateGame
         Log.d(TAG, "broadcastScores");
         mMsgBuf = new byte[2];
         mMsgBuf[0] = (byte) scoreMsgType;

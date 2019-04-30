@@ -90,7 +90,8 @@ public class GameUtils {
         return 3;
     }
 
-
+    /* TODO: DELETE */
+    /*
     public static String getTopScore() {
         int score = 0;
         return "You scored " + score + " points!";
@@ -100,13 +101,14 @@ public class GameUtils {
         int player = 1;
         return "Player " + player + "Won!";
     }
-
+*/
     /* getCollectionFieldValues
     Input: String c = collection name, f = field value
     Output: List of all the values of that field in the collection specified. (unique)
 
     Note: There is some checks in case the list is empty etc.
      */
+    /*
     public List<String>  getCollectionFieldValues(String c, final String f) throws InterruptedException {
 
         db = (FirebaseFirestore) dbSetup(); //There may be a synchronization issue.
@@ -203,6 +205,7 @@ second input.
 
 Note: There is some checks in case the list is empty etc.
  */
+    /*
     public static List<String> getSomeCategories ( List<String> allCats, int n ) {
         if (allCats.size() < n && allCats.size() != 0 ) { n = allCats.size();}
         else if (allCats.size() == 0) { return allCats;}
@@ -210,7 +213,7 @@ Note: There is some checks in case the list is empty etc.
         Collections.shuffle(fList);
         return fList.subList(0, n);
     }
-
+*/
     /* Returns n number of categories based on whatever is in the database */
     public static List<String> getRandomCategories (int n) {
         //TODO: Implement getRandomCategories
