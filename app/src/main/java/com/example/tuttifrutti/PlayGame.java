@@ -47,13 +47,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 public class PlayGame extends AppCompatActivity implements View.OnClickListener {
     //COMPLETED_TODO: For the players established, set up a game
-    //TODO: Connect to database to get categories (through GameUtils)
-    //TODO: Set up communications (chat box)
+    //COMPLETED_TODO: Connect to database to get categories (through GameUtils)
+    //TODO: (Ready to Test) Set up communications (chat box)
     //COMPLETED_TODO: Allow users to fill in two EditBoxes, containing a delimited list of a category?
     //COMPLETED_TODO: Keep a timer
     //TODO: When timer runs out, EvaluateResponses
@@ -99,7 +100,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     // Message buffer for sending messagesTex
     EditText mMessageBox;
     TextView mMessageHistory;
-    int bufferSize;
+    int bufferSize = 128;
     char scoreMsgType='F';
     char msgMsgType='M';
     byte[] mMsgBuf = new byte[128]; //
@@ -131,9 +132,17 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
             byte[] buf = realTimeMessage.getMessageData();
             String sender = realTimeMessage.getSenderParticipantId();
-            Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]);
+            Log.d(TAG, "Message received: " + (char) buf[0] + buf[1]);
 
-            //TODO: Implement handler for message
+            char msgType = (char) buf[0];
+            if (msgType == msgMsgType) {
+                //TODO: (Ready to Test) Implement handler for message
+                String msg = new String(Arrays.copyOfRange(buf, 1, buf.length));
+                mMessageHistory.append(sender + ": " + msg + '\n');
+            } else if (msgType == scoreMsgType) {
+                //TODO: Update Scores
+            }
+
         }
     };
 
@@ -319,6 +328,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         };
     };
 
+/* TODO: Validate this method is not needed and clean it up*/
+/*
     OnRealTimeMessageReceivedListener mOnRealTimeMessageReceivedListener = new OnRealTimeMessageReceivedListener() {
         @Override
         public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
@@ -326,24 +337,18 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             String sender = realTimeMessage.getSenderParticipantId();
             Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]
                     + (int) buf[2]);
-            //TODO: Can we send strings to this listener? Find out.
 
             if (buf[0] == 'S' || buf[0] == 'U') {
                 // score final or score update
-                //TODO: Update scores or words on display or something
-                }
-
-                // TODO: update the words on the screen
 
                 // if it's a final score, mark this participant as having finished
                 // the game
                 if ((char) buf[0] == 'F') {
                     updateGame();
-                    //TODO: Send to results screen
             }
         }
     };
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -589,7 +594,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         mRoomConfig = RoomConfig.builder(mRoomUpdateCallback)
                 .setInvitationIdToAccept(invitationId)
-                .setOnMessageReceivedListener(mOnRealTimeMessageReceivedListener)
+                .setOnMessageReceivedListener(mMessageReceivedHandler)
                 .setRoomStatusUpdateCallback(mRoomStatusCallbackHandler)
                 .build();
 
@@ -682,7 +687,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         mRoomConfig = RoomConfig.builder(mRoomUpdateCallback)
                 .addPlayersToInvite(invitees)
-                .setOnMessageReceivedListener(mOnRealTimeMessageReceivedListener)
+                .setOnMessageReceivedListener(mMessageReceivedHandler)
                 .setRoomStatusUpdateCallback(mRoomStatusCallbackHandler)
                 .setAutoMatchCriteria(autoMatchCriteria).build();
         mRealTimeMultiplayerClient.create(mRoomConfig);
@@ -746,17 +751,20 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void updateGame() {
-        //TODO: (Ready to Test) Implement to updateMessages
+        //TODO: (Ready to Test) Implement to send Messages
+        //TODO: Implement a trigger for this. Click send message button or something
         mMsgBuf = new byte[bufferSize];
         mMsgBuf[0] = (byte) msgMsgType;
         String msgToTransmit = mMessageBox.getText().toString();
 
-        for (int i = 1; i < mMsgBuf.length; i++) {
-            mMsgBuf[i] = (byte) msgToTransmit.charAt(i-1);
-        }
+        if (msgToTransmit.length() > 0) {
+            for (int i = 1; i < mMsgBuf.length; i++) {
+                mMsgBuf[i] = (byte) msgToTransmit.charAt(i - 1);
+            }
 
-        mRealTimeMultiplayerClient.sendUnreliableMessageToOthers(mMsgBuf, mRoomId);
-        mMessageHistory.append("Me:" + msgToTransmit + '\n');
+            mRealTimeMultiplayerClient.sendUnreliableMessageToOthers(mMsgBuf, mRoomId);
+            mMessageHistory.append("Me:" + msgToTransmit + '\n');
+        }
     }
 
     void broadcastMessage() {
