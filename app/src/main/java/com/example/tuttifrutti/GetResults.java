@@ -47,13 +47,20 @@ public class GetResults extends AppCompatActivity {
         //Assign values TextView objects
         String currentPlayer = this.getIntent().getStringExtra(GameUtils.CURRENT_PLAYER_KEY);
         String otherPlayer = this.getIntent().getStringExtra(GameUtils.OTHER_PLAYER_KEY);
-        int currentPlayerScore = Integer.parseInt(this.getIntent()
-                .getStringExtra(GameUtils.CURRENT_PLAYER_SCORE_KEY));
-        int otherPlayerScore = Integer.parseInt(this.getIntent()
-                .getStringExtra(GameUtils.OTHER_PLAYER_SCORE_KEY));
+        String curPScoreString = this.getIntent()
+                .getStringExtra(GameUtils.CURRENT_PLAYER_SCORE_KEY);
+        String otPScoreString = this.getIntent()
+                .getStringExtra(GameUtils.OTHER_PLAYER_SCORE_KEY);
+
+        Log.d(TAG, "Current Player (" + currentPlayer + ") Score: " + curPScoreString);
+        Log.d(TAG, "Other Player (" + otherPlayer + ") Score: " + otPScoreString);
+
+        int currentPlayerScore = Integer.parseInt(curPScoreString.trim());
+        int otherPlayerScore = Integer.parseInt(otPScoreString.trim());
 
         String winner = "";
         int topScore = 0;
+        boolean tie = false;
 
         if (currentPlayerScore > otherPlayerScore) {
             winner = currentPlayer;
@@ -62,12 +69,14 @@ public class GetResults extends AppCompatActivity {
             winner = otherPlayer;
             topScore = otherPlayerScore;
         } else {
-            winner = "Tie";
+            tie = true;
             topScore = currentPlayerScore;
         }
 
-        txt_scorealert.setText(GameUtils.getTopScore());
-        txt_winneralert.setText(GameUtils.getWinnerAlert());
+        if (tie) { txt_scorealert.setText("There was a tie!!"); }
+        else { txt_scorealert.setText(winner + " won !"); }
+
+        txt_winneralert.setText("You scored " + topScore + "points");
 
 
         startNewGame.setOnClickListener(

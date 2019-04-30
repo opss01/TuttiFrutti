@@ -132,7 +132,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     // Current state of the game:
     int mSecondsLeft = -1; // how long until the game ends (seconds)
-    final static int GAME_DURATION = 120; // game duration, seconds.
+    final static int GAME_DURATION = 60; // game duration, seconds.
     int mScore = 0; // user's current score
 
     private OnRealTimeMessageReceivedListener mMessageReceivedHandler = new OnRealTimeMessageReceivedListener() {
@@ -303,9 +303,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             if (room != null) {
                 mParticipants = room.getParticipants();
             }
+            /* TODO: Delete */
+            /*
             if (mParticipants != null) {
                 showResults();
             }
+            */
         }
     };
 
@@ -356,6 +359,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         bSignOut.setOnClickListener(this);
         bInviteFriends.setOnClickListener(this);
         bSendMessage.setOnClickListener(this);
+
+        //Set up FillInBoxes
+        mFillInWords1 = findViewById(R.id.fill_in_words1);
+        mFillInWords2 = findViewById(R.id.fill_in_words2);
 
         //Messaging
         mMessageBox = findViewById(R.id.message_box);
@@ -456,6 +463,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             }
             case R.id.send_msg: {
                 updateGame();
+                mMessageBox.setText(""); //Clear the message box for the next message
                 break;
             }
             case R.id.sign_out: {
@@ -724,14 +732,20 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         //Assumes there are only two participants
         for (Participant p: mParticipants) {
-            if (p.getParticipantId() != mMyId) {
+            Log.d(TAG, "My ID:" + mMyId);
+            Log.d(TAG, "Participant ID: " + p.getParticipantId());
+            if (!p.getParticipantId().equals(mMyId)) {
                intent.putExtra(GameUtils.OTHER_PLAYER_KEY, p.getDisplayName());
                intent.putExtra(GameUtils.OTHER_PLAYER_SCORE_KEY,
-                       scoreBoard.get(p.getParticipantId()));
+                       String.valueOf(scoreBoard.get(p.getParticipantId())));
+               Log.d(TAG, "Wrote name=" + p.getDisplayName() +
+                       "; score=" + scoreBoard.get(p.getParticipantId()));
             } else {
                 intent.putExtra(GameUtils.CURRENT_PLAYER_KEY, p.getDisplayName());
-                intent.putExtra(GameUtils.OTHER_PLAYER_SCORE_KEY,
-                        scoreBoard.get(p.getParticipantId()));
+                intent.putExtra(GameUtils.CURRENT_PLAYER_SCORE_KEY,
+                        String.valueOf(scoreBoard.get(p.getParticipantId())));
+                Log.d(TAG, "Wrote name=" + p.getDisplayName() +
+                        "; score=" + scoreBoard.get(p.getParticipantId()));
             }
         }
 
@@ -748,7 +762,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         if (msgToTransmit.length() > 0) {
             for (int i = 1; i < mMsgBuf.length; i++) {
-                if (msgToTransmit.length() > i) {
+                if (msgToTransmit.length() >= i) {
                     mMsgBuf[i] = (byte) msgToTransmit.charAt(i - 1);
                 }
             }
@@ -814,6 +828,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
             //if we have scores for all participants, showResults
             if (scoreBoard.size() == mParticipants.size()) {
+                Log.d(TAG, "There are " + scoreBoard.size() + " scores");
                 showResults();
             }
 
