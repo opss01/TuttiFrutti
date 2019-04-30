@@ -96,7 +96,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     //Incoming invitation, if there is one
     String mIncomingInvitationId = null;
 
-    // Message buffer for sending messages
+    // Message buffer for sending messagesTex
+    EditText mMessageBox;
+    TextView mMessageHistory;
+    int bufferSize;
+    char scoreMsgType='F';
+    char msgMsgType='M';
     byte[] mMsgBuf = new byte[128]; //
     // Structure: Byte[1] tells us the type of message; F=Final Score, M=Message
     // For F, byte 2 contains the other player's score
@@ -354,6 +359,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         bCheckInvites.setOnClickListener(this);
         bSignOut.setOnClickListener(this);
         bInviteFriends.setOnClickListener(this);
+
+        //Messaging
+        mMessageBox = findViewById(R.id.message_box);
+        mMessageHistory = findViewById(R.id.message_history);
 
         //Now let's deal with GoogleSignIn so we can call sign out...
 
@@ -737,7 +746,17 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void updateGame() {
-        //TODO: Implement to updateScores and messages
+        //TODO: (Ready to Test) Implement to updateMessages
+        mMsgBuf = new byte[bufferSize];
+        mMsgBuf[0] = (byte) msgMsgType;
+        String msgToTransmit = mMessageBox.getText().toString();
+
+        for (int i = 1; i < mMsgBuf.length; i++) {
+            mMsgBuf[i] = (byte) msgToTransmit.charAt(i-1);
+        }
+
+        mRealTimeMultiplayerClient.sendUnreliableMessageToOthers(mMsgBuf, mRoomId);
+        mMessageHistory.append("Me:" + msgToTransmit + '\n');
     }
 
     void broadcastMessage() {
@@ -815,6 +834,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             findViewById(R.id.fill_in_words2).setVisibility(View.GONE);
             broadcastMessage();
         }
+
+        broadcastMessage();
     }
 
     // Leave the room.
