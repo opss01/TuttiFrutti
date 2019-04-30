@@ -113,6 +113,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     Button bCheckInvites;
     Button bSignOut;
     Button bInviteFriends;
+    Button bSendMessage;
     TextView mMagicLetter;
     EditText mFillInWords1;
     EditText mFillInWords2;
@@ -358,12 +359,14 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         bCheckInvites = findViewById(R.id.check_invitations);
         bSignOut = findViewById(R.id.sign_out);
         bInviteFriends = findViewById(R.id.invite_friends);
+        bSendMessage = findViewById(R.id.send_msg);
 
         //Set up the buttons
         //bStartQuickGame.setOnClickListener(this);
         bCheckInvites.setOnClickListener(this);
         bSignOut.setOnClickListener(this);
         bInviteFriends.setOnClickListener(this);
+        bSendMessage.setOnClickListener(this);
 
         //Messaging
         mMessageBox = findViewById(R.id.message_box);
@@ -452,6 +455,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
                         }
                 ).addOnFailureListener(createFailureListener("There was a problem getting the inbox."));
                 break;
+            }
+            case R.id.send_msg: {
+                updateGame();
             }
             case R.id.sign_out: {
                 Log.d(TAG, "Sign Out Requested");
@@ -752,7 +758,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     void updateGame() {
         //TODO: (Ready to Test) Implement to send Messages
-        //TODO: Implement a trigger for this. Click send message button or something
+        //TODO: (Ready to Test) Implement a trigger for this. Click send message button or something
         mMsgBuf = new byte[bufferSize];
         mMsgBuf[0] = (byte) msgMsgType;
         String msgToTransmit = mMessageBox.getText().toString();

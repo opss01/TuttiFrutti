@@ -250,6 +250,7 @@
                             android:text="" />
 
                         <ImageButton
+                            android:id="@+id/send_msg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
