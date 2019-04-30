@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tuttifrutti.gameutils.GameUtils;
@@ -99,7 +102,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
     // Message buffer for sending messagesTex
     EditText mMessageBox;
-    TextView mMessageHistory;
+    ListView mMessageHistory;
+    ArrayList msgList;
+    ArrayAdapter<String> msgAdapter;
     int bufferSize = 128;
     char scoreMsgType='F';
     char msgMsgType='M';
@@ -113,7 +118,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     Button bCheckInvites;
     Button bSignOut;
     Button bInviteFriends;
-    Button bSendMessage;
+    ImageButton bSendMessage;
     TextView mMagicLetter;
     EditText mFillInWords1;
     EditText mFillInWords2;
@@ -139,7 +144,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             if (msgType == msgMsgType) {
                 //TODO: (Ready to Test) Implement handler for message
                 String msg = new String(Arrays.copyOfRange(buf, 1, buf.length));
-                mMessageHistory.append(sender + ": " + msg + '\n');
+                msgAdapter.add(sender + ": " + msg + '\n');
             } else if (msgType == scoreMsgType) {
                 //TODO: Update Scores
             }
@@ -371,6 +376,15 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         //Messaging
         mMessageBox = findViewById(R.id.message_box);
         mMessageHistory = findViewById(R.id.message_history);
+        msgList = new ArrayList<String>();
+
+        // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
+        // and the array that contains the data
+        msgAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, msgList);
+
+        // Here, you set the data in your ListView
+        mMessageHistory.setAdapter(msgAdapter);
 
         //Now let's deal with GoogleSignIn so we can call sign out...
 
@@ -458,6 +472,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             }
             case R.id.send_msg: {
                 updateGame();
+                break;
             }
             case R.id.sign_out: {
                 Log.d(TAG, "Sign Out Requested");
@@ -759,17 +774,24 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     void updateGame() {
         //TODO: (Ready to Test) Implement to send Messages
         //TODO: (Ready to Test) Implement a trigger for this. Click send message button or something
+        Log.d(TAG, "updateGame");
         mMsgBuf = new byte[bufferSize];
         mMsgBuf[0] = (byte) msgMsgType;
         String msgToTransmit = mMessageBox.getText().toString();
 
         if (msgToTransmit.length() > 0) {
             for (int i = 1; i < mMsgBuf.length; i++) {
-                mMsgBuf[i] = (byte) msgToTransmit.charAt(i - 1);
+                if (msgToTransmit.length() > i) {
+                    mMsgBuf[i] = (byte) msgToTransmit.charAt(i - 1);
+                }
             }
 
+            Log.d(TAG, "Room ID:" + mRoomId);
+            Log.d(TAG, "Transmitting message: " + String.valueOf(mMsgBuf));
             mRealTimeMultiplayerClient.sendUnreliableMessageToOthers(mMsgBuf, mRoomId);
-            mMessageHistory.append("Me:" + msgToTransmit + '\n');
+
+            Log.d(TAG, "Adding message to message_history box.");
+            msgAdapter.add("Me:" + msgToTransmit + '\n');
         }
     }
 

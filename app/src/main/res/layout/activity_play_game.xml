@@ -181,6 +181,7 @@
                         android:layout_height="wrap_content"
                         tools:text="txt" />
 
+                    <!-- TODO Allow for more than one line to fill values -->
                     <EditText
                         android:id="@+id/fill_in_words1"
                         android:layout_width="match_parent"
@@ -203,6 +204,7 @@
                         android:layout_height="wrap_content"
                         tools:text="txte" />
 
+                    <!-- TODO Allow for more than one line to fill values, should be space/comma delimited and wrap -->
                     <EditText
                         android:id="@+id/fill_in_words2"
                         android:layout_width="match_parent"
