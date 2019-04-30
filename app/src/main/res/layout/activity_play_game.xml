@@ -94,10 +94,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wait" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="@string/wait"
+                android:textAlignment="center" />
+
+            <RelativeLayout
+                android:id="@+id/loadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- GAMEPLAY SCREEN -->
@@ -194,79 +215,75 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#c1cd97"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txt_category3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-
-                    <EditText
-                        android:id="@+id/input_category3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textNoSuggestions"
-                        android:text="Fill" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#e18d96"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txt_category4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-
-                    <EditText
-                        android:id="@+id/input_category4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textNoSuggestions"
-                        android:text="Fill" />
-                </LinearLayout>
-            </LinearLayout>
-
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/message_box"
+                <LinearLayout
+                    android:id="@+id/screen_chat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:baselineAligned="false" />
+                    android:orientation="vertical">
 
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:id="@+id/message_history"
+                        android:layout_weight="2"
+                        android:divider="#fff"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/message_box"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:ems="10"
+                            android:hint="@string/input_placeholder"
+                            android:inputType="text"
+                            android:text="" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="0"
+                            android:src="@drawable/ic_send_black_24dp"
+                            android:contentDescription="send"
+                            android:padding="20dp"
+                            android:scaleType="center" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/countdown"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <TextView
-                    android:id="@+id/message_history"
-                    android:layout_width="23dp"
-                    android:layout_height="61dp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/message_history"-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="61dp" />-->
             </TableRow>
 
         </TableLayout>
 
 
     </LinearLayout>
+
+    <!-- CHAT SCREEN -->
+    <!-- TODO: Make this pretty -->
 
 
 </FrameLayout>

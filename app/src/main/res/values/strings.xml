@@ -40,5 +40,6 @@
     <string name="status_exception_error">%1$s (status %2$d). %3$s.</string>
     <string name="game_problem">An error occurred while starting the game. Please try again.</string>
     <string name="web_client_id">998166307868-u9o0t95ual7sr07kermt2n13vl368m60.apps.googleusercontent.com</string>
+    <string name="input_placeholder">Write a message</string>
 
 </resources>
