@@ -41,5 +41,8 @@
     <string name="game_problem">An error occurred while starting the game. Please try again.</string>
     <string name="web_client_id">998166307868-u9o0t95ual7sr07kermt2n13vl368m60.apps.googleusercontent.com</string>
     <string name="input_placeholder">Write a message</string>
+    <string name="txtview_score">TextView</string>
+    <string name="txtview_winner">Winner/Loser!!</string>
+    <string name="txt_btn_start_a_game">Start a Game</string>
 
 </resources>

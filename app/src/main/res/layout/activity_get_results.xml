@@ -6,4 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".GetResults">
 
+    <LinearLayout
+        android:layout_width="402dp"
+        android:layout_height="572dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layoutMode="clipBounds"
+        android:orientation="vertical"
+        android:textAlignment="inherit"
+        app:layout_constrainedHeight="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <ImageView
+            android:id="@+id/imageViewPlayGame2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/logo_description"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/txt_winner"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/txtview_winner"
+            android:textAlignment="center"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_score"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/txtview_score"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/btn_new_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bkgrnd_enter"
+            android:text="@string/txt_btn_start_a_game"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

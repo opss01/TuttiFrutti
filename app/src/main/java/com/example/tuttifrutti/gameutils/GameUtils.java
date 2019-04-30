@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.tuttifrutti.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -68,6 +69,16 @@ public class GameUtils {
         // [END set_firestore_settings]
         return db;
 
+    }
+
+    public static String getTopScore() {
+        int score = 0;
+        return "You scored " + score + " points!";
+    }
+
+    public static String getWinnerAlert() {
+        int player = 1;
+        return "Player " + player + "Won!";
     }
 
     /* getCollectionFieldValues
