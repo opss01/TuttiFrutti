@@ -48,20 +48,23 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PlayGame extends AppCompatActivity implements View.OnClickListener {
     //COMPLETED_TODO: For the players established, set up a game
     //COMPLETED_TODO: Connect to database to get categories (through GameUtils)
-    //TODO: (Ready to Test) Set up communications (chat box)
+    //COMPLETED_TODO: Set up communications (chat box)
     //COMPLETED_TODO: Allow users to fill in two EditBoxes, containing a delimited list of a category?
     //COMPLETED_TODO: Keep a timer
-    //TODO: When timer runs out, EvaluateResponses
-    //TODO: Send to GetResults (pass the content of the editboxes)
+    //TODO: (Ready to Test) When timer runs out, EvaluateResponses
+    //TODO: (Ready to Test) Send to GetResults (pass the content of the editboxes)
 
     // This array lists all the individual screens our game has.
     final static int[] SCREENS = {
@@ -109,10 +112,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     char scoreMsgType='F';
     char msgMsgType='M';
     byte[] mMsgBuf = new byte[128]; //
-    // Structure: Byte[1] tells us the type of message; F=Final Score, M=Message
-    // For F, byte 2 contains the other player's score
-    // For M, bytes 2-128, it's a message
-    // TODO: (Ready for Testing) Think about how message is structured. Add the ability to transmit game messages.
+    // Structure: Byte[0] tells us the type of message; F=Final Score, M=Message
+    // For F, byte 1 contains the other player's score, byte 2-N contains the player name
+    // For M, bytes 1-127, it's a message
+    // COMPLETED_TODO: Think about how message is structured. Add the ability to transmit game messages.
 
     //Button bStartQuickGame;
     Button bCheckInvites;
@@ -124,29 +127,31 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     EditText mFillInWords2;
 
     private String mPlayerId;
-    private int currentPlayerScore = 0;
-    private int otherPlayerScore = 0;
+    private int currentPlayerScore = -1;
+    Map<String, Integer> scoreBoard = null;
 
     // Current state of the game:
     int mSecondsLeft = -1; // how long until the game ends (seconds)
     final static int GAME_DURATION = 120; // game duration, seconds.
     int mScore = 0; // user's current score
 
-
     private OnRealTimeMessageReceivedListener mMessageReceivedHandler = new OnRealTimeMessageReceivedListener() {
         @Override
         public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
             byte[] buf = realTimeMessage.getMessageData();
             String sender = realTimeMessage.getSenderParticipantId();
+            String playerName = getParticipantName(sender);
             Log.d(TAG, "Message received: " + (char) buf[0] + buf[1]);
 
             char msgType = (char) buf[0];
             if (msgType == msgMsgType) {
-                //TODO: (Ready to Test) Implement handler for message
+                //COMPLETED_TODO: Implement handler for message
                 String msg = new String(Arrays.copyOfRange(buf, 1, buf.length));
-                msgAdapter.add(sender + ": " + msg + '\n');
+                msgAdapter.add(playerName + ": " + msg + '\n');
             } else if (msgType == scoreMsgType) {
-                //TODO: Update Scores
+                //TODO: (Ready to Test) Update Scores
+                scoreBoard.put(sender, new Integer(mMsgBuf[1]));
+                broadcastScores(); //If we haven't done so already, transmit our score to the other player
             }
 
         }
@@ -334,27 +339,6 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         };
     };
 
-/* TODO: Validate this method is not needed and clean it up*/
-/*
-    OnRealTimeMessageReceivedListener mOnRealTimeMessageReceivedListener = new OnRealTimeMessageReceivedListener() {
-        @Override
-        public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
-            byte[] buf = realTimeMessage.getMessageData();
-            String sender = realTimeMessage.getSenderParticipantId();
-            Log.d(TAG, "Message received: " + (char) buf[0] + "/" + (int) buf[1]
-                    + (int) buf[2]);
-
-            if (buf[0] == 'S' || buf[0] == 'U') {
-                // score final or score update
-
-                // if it's a final score, mark this participant as having finished
-                // the game
-                if ((char) buf[0] == 'F') {
-                    updateGame();
-            }
-        }
-    };
-*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -493,59 +477,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
-/* TODO: Delete this method */
-    /*
-    private void onConnected(GoogleSignInAccount googleSignInAccount) {
-        Log.d(TAG, "onConnected(): connected to Google APIs");
-        if (mSignedInAccount != googleSignInAccount) {
 
-            mSignedInAccount = googleSignInAccount;
-
-            // update the clients
-            //mRealTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(this, googleSignInAccount);
-            //mInvitationsClient = Games.getInvitationsClient(PlayGame.this, googleSignInAccount);
-
-            // get the playerId from the PlayersClient
-            PlayersClient playersClient = Games.getPlayersClient(this, googleSignInAccount);
-            playersClient.getCurrentPlayer()
-                    .addOnSuccessListener(new OnSuccessListener<Player>() {
-                        @Override
-                        public void onSuccess(Player player) {
-                            mPlayerId = player.getPlayerId();
-
-                            switchToScreen(R.id.screen_main);
-                        }
-                    })
-                    .addOnFailureListener(createFailureListener("There was a problem getting the player id!"));
-        }
-
-        // register listener so we are notified if we receive an invitation to play
-        // while we are in the game
-        mInvitationsClient.registerInvitationCallback(mInvitationCallback);
-
-        // get the invitation from the connection hint
-        // Retrieve the TurnBasedMatch from the connectionHint
-        GamesClient gamesClient = Games.getGamesClient(PlayGame.this,
-                googleSignInAccount);
-        gamesClient.getActivationHint()
-                .addOnSuccessListener(new OnSuccessListener<Bundle>() {
-                    @Override
-                    public void onSuccess(Bundle hint) {
-                        if (hint != null) {
-                            Invitation invitation =
-                                    hint.getParcelable(Multiplayer.EXTRA_INVITATION);
-
-                            if (invitation != null && invitation.getInvitationId() != null) {
-                                // retrieve and cache the invitation ID
-                                Log.d(TAG, "onConnected: connection hint has a room invite!");
-                                acceptInviteToRoom(invitation.getInvitationId());
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(createFailureListener("There was a problem getting the activation hint!"));
-    }
-*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Log.d(TAG, "onActivityResult");
@@ -768,12 +700,47 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
     }
 
     void showResults() {
-        //TODO: Calculate scores and send user to results screen
+        //TODO: (Ready to Test) Send user to results screen
+        Log.d(TAG, "showResults");
+
+        /* TODO: Delete */
+        /*
+        //IF some day we have N players, do this...
+        JsonObject scoreList = new JsonObject();
+        for (Participant p: mParticipants) {
+            JsonObject score = new JsonObject();
+            String name = p.getDisplayName();
+            String scoreValue = String.valueOf(scoreBoard.get(p.getParticipantId()));
+            score.addProperty(GameUtils.PLAYER_NAME_KEY, name);
+            score.addProperty(GameUtils.PLAYER_SCORE_KEY, scoreValue);
+            scoreList.add(GameUtils.SCORE_KEY, score);
+        }
+        Log.d(TAG, "Score board JSON: " + scoreList.toString());
+        intent.putExtra(Intent.EXTRA_TEXT, scoreList.toString());
+
+        */
+
+        Intent intent = new Intent(this, GetResults.class);
+
+        //Assumes there are only two participants
+        for (Participant p: mParticipants) {
+            if (p.getParticipantId() != mMyId) {
+               intent.putExtra(GameUtils.OTHER_PLAYER_KEY, p.getDisplayName());
+               intent.putExtra(GameUtils.OTHER_PLAYER_SCORE_KEY,
+                       scoreBoard.get(p.getParticipantId()));
+            } else {
+                intent.putExtra(GameUtils.CURRENT_PLAYER_KEY, p.getDisplayName());
+                intent.putExtra(GameUtils.OTHER_PLAYER_SCORE_KEY,
+                        scoreBoard.get(p.getParticipantId()));
+            }
+        }
+
+        startActivity(intent);
     }
 
     void updateGame() {
-        //TODO: (Ready to Test) Implement to send Messages
-        //TODO: (Ready to Test) Implement a trigger for this. Click send message button or something
+        //COMPLETED_TODO: Implement to send Messages
+        //COMPLETED_TODO: Implement a trigger for this. Click send message button or something
         Log.d(TAG, "updateGame");
         mMsgBuf = new byte[bufferSize];
         mMsgBuf[0] = (byte) msgMsgType;
@@ -795,8 +762,61 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    void broadcastMessage() {
-        //TODO: Implement broadcasting of messages between players? Is this redundant with updateGame
+    void evaluateScore() {
+        //TODO: (Ready to Test) Implement score evaluation
+        Log.d(TAG, "evaluateScore");
+        String category1 = mCategory1.getText().toString();
+        String category1Response = mFillInWords1.getText().toString();
+        String category2 = mCategory2.getText().toString();
+        String category2Response = mFillInWords2.getText().toString();
+
+        currentPlayerScore = GameUtils.getScoreForCategory(category1, category1Response) +
+                                GameUtils.getScoreForCategory(category2, category2Response);
+        scoreBoard.put(mMyId, new Integer(currentPlayerScore));
+        broadcastScores();
+    }
+
+    /* method will send current score to the other player(s). At the end if both scores are in,
+     * it will call showResults
+     */
+    void broadcastScores() {
+        //TODO: (Ready to Test) Implement broadcasting of messages between players? Is this redundant with updateGame
+        Log.d(TAG, "broadcastScores");
+        mMsgBuf = new byte[2];
+        mMsgBuf[0] = (byte) scoreMsgType;
+
+        mMsgBuf[1] = (byte) currentPlayerScore;
+
+            Log.d(TAG, "Room ID:" + mRoomId);
+            Log.d(TAG, "Transmitting message: " + mMsgBuf);
+
+            //Loop through participants and send each of them a score
+            for (Participant p: mParticipants) {
+                if (!p.getParticipantId().equals(mMyId)) {
+                    mRealTimeMultiplayerClient.sendReliableMessage(mMsgBuf, mRoomId, p.getParticipantId(),
+                            new RealTimeMultiplayerClient.ReliableMessageSentCallback() {
+                                @Override
+                                public void onRealTimeMessageSent(int statusCode, int tokenId, String recipientParticipantId) {
+                                    Log.d(TAG, "RealTime message sent");
+                                    Log.d(TAG, "  statusCode: " + statusCode);
+                                    Log.d(TAG, "  tokenId: " + tokenId);
+                                    Log.d(TAG, "  recipientParticipantId: " + recipientParticipantId);
+                                }
+                            })
+                            .addOnSuccessListener(new OnSuccessListener<Integer>() {
+                                @Override
+                                public void onSuccess(Integer tokenId) {
+                                    Log.d(TAG, "Created a reliable message with tokenId: " + tokenId);
+                                }
+                            });
+                }
+            }
+
+            //if we have scores for all participants, showResults
+            if (scoreBoard.size() == mParticipants.size()) {
+                showResults();
+            }
+
     }
 
 
@@ -805,9 +825,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         mSecondsLeft = GAME_DURATION;
         mScore = 0;
         categories = GameUtils.getRandomCategories(numberOfCategories);
-        //mParticipantScore.clear();
-        //mFinishedParticipants.clear();
-        //TODO: Implement scoring
+        currentPlayerScore = -1;
+        scoreBoard = new HashMap<String, Integer>();
+        //COMPLETED_TODO: Implement scoring
     }
 
     /* Game Play implemented here */
@@ -866,12 +886,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         if (mSecondsLeft <= 0) {
             // finish game
-            findViewById(R.id.fill_in_words1).setVisibility(View.GONE);
-            findViewById(R.id.fill_in_words2).setVisibility(View.GONE);
-            broadcastMessage();
+            findViewById(R.id.fill_in_words1).setFocusable(false);
+            findViewById(R.id.fill_in_words2).setFocusable(false);
+            evaluateScore();
+            broadcastScores();
         }
 
-        broadcastMessage();
     }
 
     // Leave the room.
@@ -896,6 +916,15 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+    private String getParticipantName (String participantID) {
+        String name = "Other Player";
+        for (Participant p: mParticipants) {
+            if (p.getParticipantId().equals(participantID)) {
+                name = p.getDisplayName();
+            }
+        }
+        return name;
+    }
 
 
 }

@@ -10,11 +10,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tuttifrutti.gameutils.GameUtils;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class GetResults extends AppCompatActivity {
-    //TODO: Pull content of EditBoxes, calculate it and display them to both users
     //COMPLETEDTODO: Display score
     //COMPLETEDTODO: Declare Winner
     //COMPLETEDTODO: Give option to start a new game
@@ -24,8 +30,12 @@ public class GetResults extends AppCompatActivity {
     TextView txt_winneralert;
     TextView txt_scorealert;
     Button startNewGame;
+    Map<String, Integer> scoreBoard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //COMPLETED_TODO: Pull Score from PlayGame and display it
+
         super.onCreate(savedInstanceState);
         //Get Layout
         setContentView(R.layout.activity_get_results);
@@ -33,7 +43,29 @@ public class GetResults extends AppCompatActivity {
         txt_winneralert = (TextView) findViewById(R.id.txt_winner);
         txt_scorealert = (TextView) findViewById(R.id.txt_score);
         startNewGame = (Button) findViewById( R.id.btn_new_game );
+
         //Assign values TextView objects
+        String currentPlayer = this.getIntent().getStringExtra(GameUtils.CURRENT_PLAYER_KEY);
+        String otherPlayer = this.getIntent().getStringExtra(GameUtils.OTHER_PLAYER_KEY);
+        int currentPlayerScore = Integer.parseInt(this.getIntent()
+                .getStringExtra(GameUtils.CURRENT_PLAYER_SCORE_KEY));
+        int otherPlayerScore = Integer.parseInt(this.getIntent()
+                .getStringExtra(GameUtils.OTHER_PLAYER_SCORE_KEY));
+
+        String winner = "";
+        int topScore = 0;
+
+        if (currentPlayerScore > otherPlayerScore) {
+            winner = currentPlayer;
+            topScore = currentPlayerScore;
+        } else if (otherPlayerScore > currentPlayerScore) {
+            winner = otherPlayer;
+            topScore = otherPlayerScore;
+        } else {
+            winner = "Tie";
+            topScore = currentPlayerScore;
+        }
+
         txt_scorealert.setText(GameUtils.getTopScore());
         txt_winneralert.setText(GameUtils.getWinnerAlert());
 

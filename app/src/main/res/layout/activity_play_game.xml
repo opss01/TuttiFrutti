@@ -122,7 +122,7 @@
     </LinearLayout>
 
     <!-- GAMEPLAY SCREEN -->
-    <!-- TODO: Make this pretty -->
+    <!-- COMPLETED_TODO: Make this pretty -->
 
     <LinearLayout
         android:id="@+id/screen_game"
@@ -284,9 +284,5 @@
 
 
     </LinearLayout>
-
-    <!-- CHAT SCREEN -->
-    <!-- TODO: Make this pretty -->
-
 
 </FrameLayout>

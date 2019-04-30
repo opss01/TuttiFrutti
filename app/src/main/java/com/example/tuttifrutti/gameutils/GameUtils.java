@@ -41,6 +41,18 @@ public class GameUtils {
     private final static char firstLetterOfAlphabet = 'A';
     private final static int numLettersInAlphabet = 26;
 
+    /* TODO: DELETE */
+    /*
+    public final static String SCORE_KEY="score";
+    public final static String PLAYER_SCORE_KEY="playerScore";
+    public final static String PLAYER_NAME_KEY="name";
+    */
+
+    public final static String CURRENT_PLAYER_KEY="currentPlayer";
+    public final static String OTHER_PLAYER_KEY="otherPlayer";
+    public final static String CURRENT_PLAYER_SCORE_KEY="currentPlayerScore";
+    public final static String OTHER_PLAYER_SCORE_KEY="otherPlayerScore";
+
 
 //    GameUtils(FirebaseFirestore db) {
 //        this.db = db;
@@ -70,6 +82,14 @@ public class GameUtils {
         return db;
 
     }
+
+
+    public static int getScoreForCategory (String category, String responses) {
+        //TODO: Implement a method that for a given category, validates responses in DB.
+        // method should send back the number of correct responses.
+        return 3;
+    }
+
 
     public static String getTopScore() {
         int score = 0;
