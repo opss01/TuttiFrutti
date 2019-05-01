@@ -22,6 +22,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
+import static com.example.tuttifrutti.gameutils.GameUtils.getCategoryValuesFromDB;
+import static com.example.tuttifrutti.gameutils.GameUtils.getRandomCategories;
+import static com.example.tuttifrutti.gameutils.GameUtils.getScoreForCategory;
+
 public class MainActivity extends AppCompatActivity {
     //COMPLETED_TODO: (1) Create a welcome screen
     //COMPLETED_TODO: (2) Add a button to enter the application
@@ -60,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         );
 
+//        getCategoryValuesFromDB("Animals");
         // Testing Database
+//        getScoreForCategory("Colors","amarillo\r\namber\r\namethyst\r\nbo","A");
+
 //        List<String> allCats = null;
 //        try {
 //            allCats = GameUtils.getCollectionFieldValues2( "categories", "category" );

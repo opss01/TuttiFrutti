@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import static android.Manifest.permission.READ_CONTACTS;
+//import static com.example.tuttifrutti.gameutils.GameUtils.setFirebaseCredentials;
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 /**
@@ -224,7 +225,7 @@ public class LoginActivity extends AppCompatActivity
                                 // ...
                             }
                         });
-
+//                setFirebaseCredentials(auth);
                 /* End credentials to Firebase  */
                 intent.putExtra(Intent.EXTRA_TEXT, name);
                 Log.d(TAG, "Calling PlayGame Intent.");

@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -464,6 +466,12 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             case R.id.send_msg: {
                 updateGame();
                 mMessageBox.setText(""); //Clear the message box for the next message
+                LinearLayout mainLayout;
+
+                mainLayout = (LinearLayout) findViewById(R.id.screen_game);
+                // Then just use the following:
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mainLayout.getWindowToken(), 0);
                 break;
             }
             case R.id.sign_out: {
@@ -783,9 +791,10 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         String category1Response = mFillInWords1.getText().toString();
         String category2 = mCategory2.getText().toString();
         String category2Response = mFillInWords2.getText().toString();
+        String theletter =mMagicLetter.getText().toString();
 
-        currentPlayerScore = GameUtils.getScoreForCategory(category1, category1Response) +
-                                GameUtils.getScoreForCategory(category2, category2Response);
+        currentPlayerScore = GameUtils.getScoreForCategory(category1, category1Response, theletter) +
+                                GameUtils.getScoreForCategory(category2, category2Response, theletter);
         scoreBoard.put(mMyId, new Integer(currentPlayerScore));
         broadcastScores();
     }

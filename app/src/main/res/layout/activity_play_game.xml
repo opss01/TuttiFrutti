@@ -130,13 +130,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--
-        <TextView
-            android:id="@+id/instructions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/instructions" />
-       -->
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -151,7 +144,7 @@
             <TextView
                 android:id="@+id/magic_letter"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:text="A"
                 android:textAlignment="center"
                 android:textSize="30sp" />
@@ -160,9 +153,26 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="236dp">
+            >
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/countdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <!--<TextView-->
+                <!--android:id="@+id/message_history"-->
+                <!--android:layout_width="23dp"-->
+                <!--android:layout_height="61dp" />-->
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -185,11 +195,13 @@
                     <EditText
                         android:id="@+id/fill_in_words1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="120dp"
                         android:baselineAligned="true"
                         android:ems="10"
-                        android:inputType="textNoSuggestions"
-                        android:text="Fill" />
+                        android:hint="FILL AND ENTER"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false"
+                        android:textAllCaps="true" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,16 +220,19 @@
                     <EditText
                         android:id="@+id/fill_in_words2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="120dp"
                         android:baselineAligned="true"
                         android:ems="10"
-                        android:inputType="textNoSuggestions"
-                        android:text="Fill" />
+                        android:hint="FILL AND ENTER"
+                        android:inputType="textMultiLine"
+                        android:maxLines="20"
+                        android:singleLine="false"
+                        android:textAllCaps="true" />
                 </LinearLayout>
             </LinearLayout>
 
 
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -227,13 +242,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:id="@+id/message_history"
-                        android:layout_weight="2"
-                        android:divider="#fff"
-                        android:layout_height="wrap_content"
-                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -244,7 +252,7 @@
                         <EditText
                             android:id="@+id/message_box"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="2"
                             android:ems="10"
                             android:hint="@string/input_placeholder"
@@ -257,28 +265,21 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="0"
-                            android:src="@drawable/ic_send_black_24dp"
                             android:contentDescription="send"
                             android:padding="20dp"
-                            android:scaleType="center" />
+                            android:scaleType="center"
+                            android:src="@android:drawable/ic_menu_send" />
                     </LinearLayout>
 
+                    <ListView
+                        android:id="@+id/message_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:divider="#fff"
+                        android:scrollbarAlwaysDrawVerticalTrack="true" />
                 </LinearLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <TextView
-                    android:id="@+id/countdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <!--<TextView-->
-                    <!--android:id="@+id/message_history"-->
-                    <!--android:layout_width="23dp"-->
-                    <!--android:layout_height="61dp" />-->
-            </TableRow>
+            </LinearLayout>
 
         </TableLayout>
 
