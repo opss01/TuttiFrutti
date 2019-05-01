@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class GameUtils {
@@ -40,6 +42,9 @@ public class GameUtils {
     public final static String CURRENT_PLAYER_SCORE_KEY="currentPlayerScore";
     public final static String OTHER_PLAYER_SCORE_KEY="otherPlayerScore";
     private static FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    private static Map<String, ArrayList<String>> savedCategoryValues = null;
+
 //    public static void setFirebaseCredentials(FirebaseAuth authgood){
 //        auth = authgood;
 //        return;
@@ -54,6 +59,7 @@ public class GameUtils {
         }
     }
 
+    /* TODO: When should this be called, if at all? If not needed, clean up. */
     public static Object dbSetup () {
         // Access a Cloud Firestore instance from your Activity
         // [START get_firestore_instance]
@@ -98,14 +104,13 @@ public class GameUtils {
         }
     }
 
-    public static Map<String, String> getCategoryValuesFromDB(String cat)
+    public static void getCategoryValuesFromDB()
     {
-
-
         Map<String,String> categoryValues = new HashMap<>();
         //Firebase
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase dbase = FirebaseDatabase.getInstance();
+        dbase.setPersistenceEnabled(true);
+        DatabaseReference dbRef = dbase.getReference();
 //        final String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
         dbRef.child("categories").child("").addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -116,9 +121,11 @@ public class GameUtils {
 
                             Categories cat1 = catDataSnapshot.getValue(Categories.class);
                             Log.d(TAG,"CAT" + cat1.getCategory() + " Value " + cat1.getVal());
-                            if(cat1.getCategory().toString().contentEquals(cat.toLowerCase()))
-                            {categoryValues.put(cat1.getCategory(),cat1.getVal());
-                                Log.d(TAG,"issue" + cat1.getVal());}
+                                //if(cat1.getCategory().toString().contentEquals(cat.toLowerCase()))
+                                //{
+                            categoryValues.put(cat1.getCategory(),cat1.getVal());
+                            Log.d(TAG,"issue" + cat1.getVal());
+                                //}
                         }
 
                     }
@@ -129,77 +136,66 @@ public class GameUtils {
                                 ""+databaseError);
 
                     }
-                });
-        return categoryValues;
+
+                    public void onComplete (DatabaseError error, DatabaseReference ref) {
+                        //TODO: Once the task above completes, update savedCategoryValues
+                        Log.d(TAG, "onComplete");
+                        Log.d(TAG, "Async call to DB returning values... Updating savedCategoryValues");
+                        savedCategoryValues = new HashMap<String, ArrayList<String>> ();
+                        for (String cat : categoryValues.keySet()) {
+                            ArrayList<String> valueList = new ArrayList<String> ();
+                            while (categoryValues.containsKey(cat)) {
+                                valueList.add(categoryValues.remove(cat));
+                            }
+                            savedCategoryValues.put(cat, valueList);
+                        }
+                    }
+
+        });
+
+
+
 
     }
 
     public static int getScoreForCategory (String category, String responses, String letter) {
-        //TODO: Implement a method that for a given category, validates responses in DB.
+        //COMPLETED_TODO: Implement a method that for a given category, validates responses in DB.
         // method should send back the number of correct responses.
-//        Map<String,String> cat = getCategoryValuesFromDB(category);
         int score = 0;
+        Log.d(TAG, "Category: " + category);
         Log.d(TAG,"Responses" + responses);
-//        ArrayList<String> colorsls = new ArrayList<String>();
-//        colorsls.add("amber");
-//        colorsls.add("amethyst");
-//        colorsls.add("apricot");
-        ArrayList<String> colorsls = new ArrayList<String>();
-        Collections.addAll(colorsls, "amber","amethyst","apricot","aquamarine","azure","baby blue","beige","black","blue","blue-green",
-                "blue-violet","blush","bronze","brown","burgundy","byzantium","carmine","cerise","cerulean","champagne","chartreuse green","chocolate",
-                "cobalt blue","coffee","copper","coral","crimson","cyan","desert sand","electric blue","emerald","erin","gold","gray","green","harlequin",
-                "indigo","ivory","jade","jungle green","lavender","lemon","lilac","lime","magenta","magenta rose","maroon","mauve","navy blue","ochre",
-                "olive","orange","orange-red","orchid","peach","pear","periwinkle","persian blue","pink","plum","prussian blue","puce","purple",
-                "raspberry","red","red-violet","rose","ruby","salmon","sangria","sapphire","scarlet","silver","slate gray","spring bud","spring green",
-                "tan","taupe","teal","turquoise","ultramarine","violet","viridian","white","yellow");
-        ArrayList<String> animalsls = new ArrayList<String>();
-        Collections.addAll(colorsls, "cat","dog","donkey","goat","guinea pig","horse","pig","rabbit","water buffalo","alpaca","american buffalo",
-                "robin","anaconda","angelfish","anglerfish","ant","anteater","antelope","antlion","ape","aphid","arabian leopard","arctic fox",
-                "arctic wolf","armadillo","arrow crab","asp","ass","baboon","badger","bald eagle","bandicoot","barnacle","barracuda","basilisk","bass",
-                "bat","beaked whale","bear","beaver","bedbug","bee","beetle","bird","bison","blackbird","black panther","black widow spider",
-                "blue bird","blue jay","blue whale","boa","boar","bobcat","bobolink","bonobo","box jellyfish","bovid","buffalo","bug","butterfly","buzzard",
-                "camel","canid","cape buffalo","capybara","cardinal","caribou","carp","cat","catshark","caterpillar","catfish","cattle","centipede",
-                "cephalopod","chameleon","cheetah","chickadee","chicken","chimpanzee","chinchilla","chipmunk","clam","clownfish","cobra","cockroach",
-                "cod","condor","constrictor","coral","cougar","cow","coyote","crab","crane","crane fly","crawdad","crayfish","cricket","crocodile","crow",
-                "cuckoo","cicada","damselfly","deer","dingo","dinosaur","dolphin","donkey","dormouse","dove","dragonfly","dragon",
-                "duck","dung beetle","eagle","earthworm","earwig","echidna","eel","egret","elephant","elephant seal","elk","emu","english pointer",
-                "ermine","falcon","ferret","finch","firefly","fish","flamingo","flea","fly","flyingfish","fowl","fox","frog","fruit bat","gamefowl",
-                "galliform","gazelle","gecko","gerbil","giant panda","giant squid","gibbon","gila monster","giraffe","goat","goldfish",
-                "goose","gopher","gorilla","grasshopper","great blue heron","great white shark","grizzly bear","ground shark","ground sloth",
-                "grouse","guan","guanaco","guineafowl","gull","guppy","haddock","halibut","hammerhead shark","hamster",
-                "hare","harrier","hawk","hedgehog","hermit crab","heron","herring","hippopotamus","hookworm","hornet","horse","hoverfly",
-                "hummingbird","humpback whale","hyena","iguana","impala","irukandji jellyfish","jackal","jaguar","jay","jellyfish","junglefowl",
-                "kangaroo","kangaroo mouse","kangaroo rat","kingfisher","kite","kiwi","koala","koi","komodo dragon","krill","ladybug","lamprey",
-                "landfowl","land snail","lark","leech","lemming","lemur","leopard","leopon","limpet","lion","lizard","llama","lobster","locust",
-                "loon","louse","lungfish","lynx","macaw","mackerel","magpie","mammal","manatee","mandrill","manta ray","marlin","marmoset","marmot",
-                "marsupial","marten","mastodon","meadowlark","meerkat","mink","minnow","mite","mockingbird","mole","mollusk","mongoose","monitor lizard",
-                "monkey","moose","mosquito","moth","mountain goat","mouse","mule","muskox","narwhal","newt","new world quail","nightingale","ocelot",
-                "octopus","old world quail","opossum","orangutan","orca","ostrich","otter","owl","ox","panda","panther","panthera hybrid","parakeet",
-                "parrot","parrotfish","partridge","peacock","peafowl","pelican","penguin","perch","peregrine falcon","pheasant","pig","pigeon",
-                "pike","pilot whale","pinniped","piranha","planarian","platypus","polar bear","pony","porcupine","porpoise",
-                "possum","prairie dog","prawn","praying mantis","primate","ptarmigan","puffin","puma","python","quail","quelea","quokka","rabbit",
-                "raccoon","rainbow trout","rat","rattlesnake","raven","ray","red panda","reindeer","reptile","rhinoceros",
-                "right whale","roadrunner","rodent","rook","rooster","roundworm","saber-toothed cat","sailfish","salamander","salmon","sawfish",
-                "scale insect","scallop","scorpion","seahorse","sea lion","sea slug","sea snail","shark","sheep","shrew","shrimp","silkworm",
-                "silverfish","skink","skunk","sloth","slug","smelt","snail","snake","snipe","snow leopard","sockeye salmon","sole","sparrow",
-                "sperm whale","spider","spider monkey","spoonbill","squid","squirrel","starfish","star-nosed mole","steelhead trout","stingray","stoat",
-                "stork","sturgeon","sugar glider","swallow","swan","swift","swordfish","swordtail","tahr","takin","tapir","tarantula","tarsier",
-                "tasmanian devil","termite","tern","thrush","tick","tiger","tiger shark","tiglon","toad","tortoise","toucan","trapdoor spider","tree frog",
-                "trout","tuna","turkey","turtle","tyrannosaurus","urial","vampire bat","vampire squid","vicuna","viper","vole","vulture","wallaby",
-                "walrus","wasp","warbler","water boa","weasel","whale","whippet","whitefish","whooping crane","wildcat","wildebeest",
-                "wildfowl","wolf","wolverine","wombat","woodpecker","worm","wren","xerinae","x-ray fish","yak","yellow perch","zebra","zebra finch");
 
-        String lines[] = responses.toLowerCase().split("\\r?\\n");
+        if (savedCategoryValues != null) {
+            ArrayList<String> validList = savedCategoryValues.get(category);
+            if (validList != null) {
+                String[] lines = responses.toLowerCase().split("\\r?\\n");
+                for (String l: lines) {
+                    if (l.charAt(0)==letter.charAt(0) && validList.contains(l)) { score++; }
+                }
+            }
+        }
+
+        return score;
+        /*
+        String[] lines = responses.toLowerCase().split("\\r?\\n");
         for (int i=0;i<lines.length;i++)
         {
+            if (lines[i].trim().length() > 0) {
+                Log.d(TAG, "Checking value: " + lines[i].trim());
+
+            }
+
             if (lines[i].charAt(0) == letter.toLowerCase().charAt(0))
             {Log.d(TAG,"in LOOP " + category.toLowerCase().trim().toString() + "999" + lines[i].trim().toString());
                 if (category.toLowerCase().trim().toString().contentEquals("colors") && colorsls.contains(lines[i].trim().toString()))
                 {Log.d(TAG,"String in loop: " + lines[i]);
             score += 3;}
+
             }
+
         }
-        return score;
+        */
+
     }
 
     /* TODO: DELETE */
@@ -262,10 +258,23 @@ Note: There is some checks in case the list is empty etc.
     }
     */
 
-    public static ArrayList<String> holdValues = new ArrayList<String> ();
+    //public static ArrayList<String> holdValues = new ArrayList<String> ();
+
     /* Returns n number of categories based on whatever is in the database */
     public static List<String> getRandomCategories(int n) {
-        //TODO: Implement getRandomCategories
+        //COMPLETED_TODO: Implement getRandomCategories
+        Set<String> categorySet = savedCategoryValues.keySet();
+        List inputCategoryList = new ArrayList<String> ();
+        inputCategoryList.addAll(categorySet);
+        Collections.shuffle(inputCategoryList);
+
+        List outputCategoryList = new ArrayList<String> ();
+        for (int i = 0; i < inputCategoryList.size() && i < n; i++) {
+            outputCategoryList.add(inputCategoryList.get(i));
+        }
+
+        return outputCategoryList;
+
         //Firebase
 
 
@@ -303,21 +312,94 @@ Note: There is some checks in case the list is empty etc.
 //
 //            }
 //        });
+//
+//        holdValues.add("Colors");
+//        holdValues.add("Animals");
 
-        holdValues.add("Colors");
-        holdValues.add("Animals");
-
-        return (holdValues);
+//        return (holdValues);
     }
 
+/*
     private static void addToHoldValues(String category) {
         holdValues.add(category);
     }
+*/
 
     public static char randomLetter (){
         Random r = new Random();
         int nextRand = r.nextInt(numLettersInAlphabet);
         return (char) (firstLetterOfAlphabet + nextRand);
-        //return sequence.remove( nextRand );
+    }
+
+
+    public static void setUpCategories() {
+
+        savedCategoryValues = new HashMap<String, ArrayList<String>> ();
+
+        /* Default config until DB updates the static variable */
+        ArrayList<String> colorsls = getTestColors();
+        ArrayList<String> animalsls = getTestAnimals();
+
+        savedCategoryValues.put("colors", colorsls);
+        savedCategoryValues.put("animals", animalsls);
+
+        //COMPLETED_TODO: Call getCategoryValuesFromDB
+        /*Production Configuration */
+        getCategoryValuesFromDB();
+
+
+    }
+
+    private static ArrayList<String> getTestColors() {
+        ArrayList<String> colorsls = new ArrayList<String>();
+        Collections.addAll(colorsls, "amber","amethyst","apricot","aquamarine","azure","baby blue","beige","black","blue","blue-green",
+                "blue-violet","blush","bronze","brown","burgundy","byzantium","carmine","cerise","cerulean","champagne","chartreuse green","chocolate",
+                "cobalt blue","coffee","copper","coral","crimson","cyan","desert sand","electric blue","emerald","erin","gold","gray","green","harlequin",
+                "indigo","ivory","jade","jungle green","lavender","lemon","lilac","lime","magenta","magenta rose","maroon","mauve","navy blue","ochre",
+                "olive","orange","orange-red","orchid","peach","pear","periwinkle","persian blue","pink","plum","prussian blue","puce","purple",
+                "raspberry","red","red-violet","rose","ruby","salmon","sangria","sapphire","scarlet","silver","slate gray","spring bud","spring green",
+                "tan","taupe","teal","turquoise","ultramarine","violet","viridian","white","yellow");
+
+        return colorsls;
+    }
+
+    private static ArrayList<String> getTestAnimals() {
+        ArrayList<String> animalsls = new ArrayList<String>();
+        Collections.addAll(animalsls, "cat","dog","donkey","goat","guinea pig","horse","pig","rabbit","water buffalo","alpaca","american buffalo",
+                "robin","anaconda","angelfish","anglerfish","ant","anteater","antelope","antlion","ape","aphid","arabian leopard","arctic fox",
+                "arctic wolf","armadillo","arrow crab","asp","ass","baboon","badger","bald eagle","bandicoot","barnacle","barracuda","basilisk","bass",
+                "bat","beaked whale","bear","beaver","bedbug","bee","beetle","bird","bison","blackbird","black panther","black widow spider",
+                "blue bird","blue jay","blue whale","boa","boar","bobcat","bobolink","bonobo","box jellyfish","bovid","buffalo","bug","butterfly","buzzard",
+                "camel","canid","cape buffalo","capybara","cardinal","caribou","carp","cat","catshark","caterpillar","catfish","cattle","centipede",
+                "cephalopod","chameleon","cheetah","chickadee","chicken","chimpanzee","chinchilla","chipmunk","clam","clownfish","cobra","cockroach",
+                "cod","condor","constrictor","coral","cougar","cow","coyote","crab","crane","crane fly","crawdad","crayfish","cricket","crocodile","crow",
+                "cuckoo","cicada","damselfly","deer","dingo","dinosaur","dolphin","donkey","dormouse","dove","dragonfly","dragon",
+                "duck","dung beetle","eagle","earthworm","earwig","echidna","eel","egret","elephant","elephant seal","elk","emu","english pointer",
+                "ermine","falcon","ferret","finch","firefly","fish","flamingo","flea","fly","flyingfish","fowl","fox","frog","fruit bat","gamefowl",
+                "galliform","gazelle","gecko","gerbil","giant panda","giant squid","gibbon","gila monster","giraffe","goat","goldfish",
+                "goose","gopher","gorilla","grasshopper","great blue heron","great white shark","grizzly bear","ground shark","ground sloth",
+                "grouse","guan","guanaco","guineafowl","gull","guppy","haddock","halibut","hammerhead shark","hamster",
+                "hare","harrier","hawk","hedgehog","hermit crab","heron","herring","hippopotamus","hookworm","hornet","horse","hoverfly",
+                "hummingbird","humpback whale","hyena","iguana","impala","irukandji jellyfish","jackal","jaguar","jay","jellyfish","junglefowl",
+                "kangaroo","kangaroo mouse","kangaroo rat","kingfisher","kite","kiwi","koala","koi","komodo dragon","krill","ladybug","lamprey",
+                "landfowl","land snail","lark","leech","lemming","lemur","leopard","leopon","limpet","lion","lizard","llama","lobster","locust",
+                "loon","louse","lungfish","lynx","macaw","mackerel","magpie","mammal","manatee","mandrill","manta ray","marlin","marmoset","marmot",
+                "marsupial","marten","mastodon","meadowlark","meerkat","mink","minnow","mite","mockingbird","mole","mollusk","mongoose","monitor lizard",
+                "monkey","moose","mosquito","moth","mountain goat","mouse","mule","muskox","narwhal","newt","new world quail","nightingale","ocelot",
+                "octopus","old world quail","opossum","orangutan","orca","ostrich","otter","owl","ox","panda","panther","panthera hybrid","parakeet",
+                "parrot","parrotfish","partridge","peacock","peafowl","pelican","penguin","perch","peregrine falcon","pheasant","pig","pigeon",
+                "pike","pilot whale","pinniped","piranha","planarian","platypus","polar bear","pony","porcupine","porpoise",
+                "possum","prairie dog","prawn","praying mantis","primate","ptarmigan","puffin","puma","python","quail","quelea","quokka","rabbit",
+                "raccoon","rainbow trout","rat","rattlesnake","raven","ray","red panda","reindeer","reptile","rhinoceros",
+                "right whale","roadrunner","rodent","rook","rooster","roundworm","saber-toothed cat","sailfish","salamander","salmon","sawfish",
+                "scale insect","scallop","scorpion","seahorse","sea lion","sea slug","sea snail","shark","sheep","shrew","shrimp","silkworm",
+                "silverfish","skink","skunk","sloth","slug","smelt","snail","snake","snipe","snow leopard","sockeye salmon","sole","sparrow",
+                "sperm whale","spider","spider monkey","spoonbill","squid","squirrel","starfish","star-nosed mole","steelhead trout","stingray","stoat",
+                "stork","sturgeon","sugar glider","swallow","swan","swift","swordfish","swordtail","tahr","takin","tapir","tarantula","tarsier",
+                "tasmanian devil","termite","tern","thrush","tick","tiger","tiger shark","tiglon","toad","tortoise","toucan","trapdoor spider","tree frog",
+                "trout","tuna","turkey","turtle","tyrannosaurus","urial","vampire bat","vampire squid","vicuna","viper","vole","vulture","wallaby",
+                "walrus","wasp","warbler","water boa","weasel","whale","whippet","whitefish","whooping crane","wildcat","wildebeest",
+                "wildfowl","wolf","wolverine","wombat","woodpecker","worm","wren","xerinae","x-ray fish","yak","yellow perch","zebra","zebra finch");
+        return animalsls;
     }
 }

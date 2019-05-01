@@ -185,6 +185,7 @@
                     android:background="#97f2f3"
                     android:orientation="vertical">
 
+                    <!-- TODO: Sometimes the category doesn't show up on screen -->
                     <TextView
                         android:id="@+id/category1"
                         android:layout_width="match_parent"
@@ -199,9 +200,8 @@
                         android:baselineAligned="true"
                         android:ems="10"
                         android:hint="FILL AND ENTER"
-                        android:inputType="textMultiLine"
-                        android:singleLine="false"
-                        android:textAllCaps="true" />
+                        android:inputType="textMultiLine|textCapCharacters"
+                        android:singleLine="false"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -210,6 +210,7 @@
                     android:background="#F3DDB3"
                     android:orientation="vertical">
 
+                    <!-- TODO: Sometimes the category doesn't show up on screen -->
                     <TextView
                         android:id="@+id/category2"
                         android:layout_width="match_parent"
@@ -224,10 +225,9 @@
                         android:baselineAligned="true"
                         android:ems="10"
                         android:hint="FILL AND ENTER"
-                        android:inputType="textMultiLine"
+                        android:inputType="textMultiLine|textCapCharacters"
                         android:maxLines="20"
-                        android:singleLine="false"
-                        android:textAllCaps="true" />
+                        android:singleLine="false" />
                 </LinearLayout>
             </LinearLayout>
 

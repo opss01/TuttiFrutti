@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
+        GameUtils.setUpCategories();
+
         enterButton = (Button) findViewById( R.id.enter_button );
         enterButton.setOnClickListener(
                 new View.OnClickListener() {

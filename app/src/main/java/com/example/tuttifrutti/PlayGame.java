@@ -153,7 +153,9 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             } else if (msgType == scoreMsgType) {
                 //COMPLETED_TODO: (Ready to Test) Update Scores
                 scoreBoard.put(sender, new Integer(mMsgBuf[1]));
-                broadcastScores(); //If we haven't done so already, transmit our score to the other player
+                if (scoreBoard.keySet().size() == mParticipants.size()) {
+                    showResults(); //If we now have both scores, go to ShowResults
+                }
             }
 
         }
@@ -305,12 +307,6 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             if (room != null) {
                 mParticipants = room.getParticipants();
             }
-            /* TODO: Delete */
-            /*
-            if (mParticipants != null) {
-                showResults();
-            }
-            */
         }
     };
 
@@ -330,7 +326,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
 
         @Override
         public void onInvitationRemoved(@NonNull String s) {
-            //TODO: Implement onInvitationRemoved which gets called when an invitation is removed
+            //COMPLETED_TODO: Implement onInvitationRemoved which gets called when an invitation is removed
+            leaveRoom();
         }
     };
 
@@ -719,7 +716,6 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         //COMPLETED_TODO: (Ready to Test) Send user to results screen
         Log.d(TAG, "showResults");
 
-        /* TODO: Delete */
         /*
         //IF some day we have N players, do this...
         JsonObject scoreList = new JsonObject();
