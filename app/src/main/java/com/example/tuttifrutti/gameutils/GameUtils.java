@@ -35,13 +35,6 @@ public class GameUtils {
     private final static char firstLetterOfAlphabet = 'A';
     private final static int numLettersInAlphabet = 26;
 
-    /* TODO: DELETE */
-    /*
-    public final static String SCORE_KEY="score";
-    public final static String PLAYER_SCORE_KEY="playerScore";
-    public final static String PLAYER_NAME_KEY="name";
-    */
-
     public final static String CURRENT_PLAYER_KEY="currentPlayer";
     public final static String OTHER_PLAYER_KEY="otherPlayer";
     public final static String CURRENT_PLAYER_SCORE_KEY="currentPlayerScore";
@@ -226,7 +219,7 @@ Note: There is some checks in case the list is empty etc.
         Collections.shuffle(fList);
         return fList.subList(0, n);
     }
-*/
+
     public interface MyCallback {
         void onCallback(Categories value);
     }
@@ -267,6 +260,8 @@ Note: There is some checks in case the list is empty etc.
         });
 
     }
+    */
+
     public static ArrayList<String> holdValues = new ArrayList<String> ();
     /* Returns n number of categories based on whatever is in the database */
     public static List<String> getRandomCategories(int n) {
