@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.tuttifrutti.gameutils.GameUtils;
+import com.google.android.gms.games.Game;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
@@ -25,6 +26,7 @@ import java.util.List;
 import static com.example.tuttifrutti.gameutils.GameUtils.getCategoryValuesFromDB;
 import static com.example.tuttifrutti.gameutils.GameUtils.getRandomCategories;
 import static com.example.tuttifrutti.gameutils.GameUtils.getScoreForCategory;
+//import static com.example.tuttifrutti.gameutils.GameUtils.readData;
 
 public class MainActivity extends AppCompatActivity {
     //COMPLETED_TODO: (1) Create a welcome screen
@@ -78,14 +80,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        List<String> someCats = GameUtils.getSomeCategories( allCats, 2 );
 //        Log.w( TAG, "outofTestingIn in cities" + allCats );
-//        Log.w( TAG, "outofTestingIn in cities" + someCats );
-//        // Testing of Game Initial and Random Letters setup.
-//        GameUtils.gameInitialSetup();
-//
-//        for (int i = 0 ; i < 22; i++) {
-//            Log.w( TAG, "TestingRandom: " + GameUtils.randomLetter() );
-//        }
-//
+
     }
 
     /** Navigation to Login Activity */

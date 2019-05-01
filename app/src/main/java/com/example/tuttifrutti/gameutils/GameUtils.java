@@ -1,5 +1,6 @@
 package com.example.tuttifrutti.gameutils;
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -15,19 +16,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.database.DatabaseReference;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class GameUtils {
     private static final String TAG = "GameUtils";
@@ -41,14 +36,13 @@ public class GameUtils {
     public final static String OTHER_PLAYER_KEY="otherPlayer";
     public final static String CURRENT_PLAYER_SCORE_KEY="currentPlayerScore";
     public final static String OTHER_PLAYER_SCORE_KEY="otherPlayerScore";
+    public final static HashMap<String,ArrayList<String>> hashmap=new HashMap<>();
+
+
     private static FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private static Map<String, ArrayList<String>> savedCategoryValues = null;
 
-//    public static void setFirebaseCredentials(FirebaseAuth authgood){
-//        auth = authgood;
-//        return;
-//    }
     public static boolean isLoggedIn(Activity activity) {
         //COMPLETED_TODO: Return true if user is logged in
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(activity);
@@ -59,22 +53,6 @@ public class GameUtils {
         }
     }
 
-    /* TODO: When should this be called, if at all? If not needed, clean up. */
-    public static Object dbSetup () {
-        // Access a Cloud Firestore instance from your Activity
-        // [START get_firestore_instance]
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // [END get_firestore_instance]
-
-        // [START set_firestore_settings]
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
-        db.setFirestoreSettings(settings);
-        // [END set_firestore_settings]
-        return db;
-
-    }
     static class Categories {
         String category;
         String value;
@@ -106,12 +84,14 @@ public class GameUtils {
 
     public static void getCategoryValuesFromDB()
     {
-        Map<String,String> categoryValues = new HashMap<>();
+//        Map<String,String> categoryValues = new HashMap<>();
         //Firebase
-        FirebaseDatabase dbase = FirebaseDatabase.getInstance();
-        dbase.setPersistenceEnabled(true);
-        DatabaseReference dbRef = dbase.getReference();
+        FirebaseDatabase.getInstance();
+//        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+//        dbase.setPersistenceEnabled(true);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 //        final String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+        final Query query =dbRef.child("categories").child("");
         dbRef.child("categories").child("").addListenerForSingleValueEvent(new ValueEventListener() {
 
                     @Override
@@ -120,12 +100,16 @@ public class GameUtils {
                         for (DataSnapshot catDataSnapshot : dataSnapshot.getChildren()) {
 
                             Categories cat1 = catDataSnapshot.getValue(Categories.class);
-                            Log.d(TAG,"CAT" + cat1.getCategory() + " Value " + cat1.getVal());
-                                //if(cat1.getCategory().toString().contentEquals(cat.toLowerCase()))
-                                //{
-                            categoryValues.put(cat1.getCategory(),cat1.getVal());
-                            Log.d(TAG,"issue" + cat1.getVal());
-                                //}
+                            //if the hashmap doesn't have category add the category
+                            if (!savedCategoryValues.containsKey(cat1.getCategory().toString())) {
+                                Log.d(TAG,"ADDING CATEGORY " + cat1.getCategory());
+                                savedCategoryValues.put(cat1.getCategory().toLowerCase().toString(),new ArrayList<String>());
+                            }
+                            //if the value for the category is not in the list add
+                            if (!savedCategoryValues.get(cat1.getCategory().toLowerCase().toString()).contains(cat1.getVal().toLowerCase().toString())) {
+                                Log.d(TAG, "ADDING VALUE " + cat1.getVal().toLowerCase().toString() + " TO CAT " + cat1.getCategory().toLowerCase().toString());
+                                savedCategoryValues.get(cat1.getCategory().toLowerCase().toString()).add(cat1.getVal().toLowerCase().toString());
+                            }
                         }
 
                     }
@@ -134,23 +118,7 @@ public class GameUtils {
                     public void onCancelled(DatabaseError databaseError) {
                         Log.d(TAG, "Error trying to get classified ad for update " +
                                 ""+databaseError);
-
                     }
-
-                    public void onComplete (DatabaseError error, DatabaseReference ref) {
-                        //TODO: Once the task above completes, update savedCategoryValues
-                        Log.d(TAG, "onComplete");
-                        Log.d(TAG, "Async call to DB returning values... Updating savedCategoryValues");
-                        savedCategoryValues = new HashMap<String, ArrayList<String>> ();
-                        for (String cat : categoryValues.keySet()) {
-                            ArrayList<String> valueList = new ArrayList<String> ();
-                            while (categoryValues.containsKey(cat)) {
-                                valueList.add(categoryValues.remove(cat));
-                            }
-                            savedCategoryValues.put(cat, valueList);
-                        }
-                    }
-
         });
 
 
@@ -174,29 +142,54 @@ public class GameUtils {
                 }
             }
         }
-
         return score;
-        /*
-        String[] lines = responses.toLowerCase().split("\\r?\\n");
-        for (int i=0;i<lines.length;i++)
-        {
-            if (lines[i].trim().length() > 0) {
-                Log.d(TAG, "Checking value: " + lines[i].trim());
-
-            }
-
-            if (lines[i].charAt(0) == letter.toLowerCase().charAt(0))
-            {Log.d(TAG,"in LOOP " + category.toLowerCase().trim().toString() + "999" + lines[i].trim().toString());
-                if (category.toLowerCase().trim().toString().contentEquals("colors") && colorsls.contains(lines[i].trim().toString()))
-                {Log.d(TAG,"String in loop: " + lines[i]);
-            score += 3;}
-
-            }
-
-        }
-        */
-
     }
+
+
+//    public static void readData() {
+//        Log.d(TAG,"INSIDE");
+//        FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true);
+//        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+//        final Query query =dbRef.child("categories").child("");
+//        query.keepSynced(true);
+//        dbRef.child("categories").child("").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                for (DataSnapshot catDataSnapshot : dataSnapshot.getChildren()) {
+//                    Categories cat1 = catDataSnapshot.getValue(Categories.class);
+//                    //if the hashmap doesn't have category add the category
+//                    if (!hashmap.containsKey(cat1.getCategory().toString()))
+//                    {
+//                        Log.d(TAG,"ADDING CATEGORY " + cat1.getCategory());
+//                        hashmap.put(cat1.getCategory().toLowerCase().toString(),new ArrayList<String>());
+//                    }
+//                    //add the value regardless
+//                    Log.d(TAG,"ADDING VALUE " + cat1.getVal().toLowerCase().toString() + " TO CAT "+  cat1.getCategory().toLowerCase().toString());
+//                    hashmap.get(cat1.getCategory().toLowerCase().toString()).add( cat1.getVal().toLowerCase().toString());
+//
+//                    if (holdValues.isEmpty())
+//                    {addToHoldValues(cat1.getCategory());
+//                        myCallback.onCallback(cat1);
+//                    }
+//                    if (!holdValues.contains(cat1.getCategory())) {
+//
+//                        addToHoldValues(cat1.getCategory());
+//
+//                        Log.d(TAG,"CATEGORY " + cat1.getCategory());
+//                        myCallback.onCallback(cat1);
+//                    }
+//                    holdValues.add(cat1.getCategory());
+//                }
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d(TAG, "Error trying to get classified ad for update " +
+//                        ""+databaseError);
+//            }
+//        });
+//
+//    }
 
     /* TODO: DELETE */
 
@@ -219,45 +212,7 @@ Note: There is some checks in case the list is empty etc.
     public interface MyCallback {
         void onCallback(Categories value);
     }
-
-    public static void readData(MyCallback myCallback) {
-        FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true);
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-        final Query query =dbRef.child("categories").child("");
-//        query.keepSynced(true);
-        dbRef.child("categories").child("").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot catDataSnapshot : dataSnapshot.getChildren()) {
-                    Categories cat1 = catDataSnapshot.getValue(Categories.class);
-
-                    if (holdValues.isEmpty())
-                    {addToHoldValues(cat1.getCategory());
-                        myCallback.onCallback(cat1);}
-                    if (!holdValues.contains(cat1.getCategory())) {
-
-                        addToHoldValues(cat1.getCategory());
-
-                        Log.d(TAG,"CATEGORY " + cat1.getCategory());
-                        myCallback.onCallback(cat1);
-                    }
-
-//                    holdValues.add(cat1.getCategory());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "Error trying to get classified ad for update " +
-                        ""+databaseError);
-
-            }
-        });
-
-    }
-    */
-
+*/
     //public static ArrayList<String> holdValues = new ArrayList<String> ();
 
     /* Returns n number of categories based on whatever is in the database */
@@ -337,11 +292,11 @@ Note: There is some checks in case the list is empty etc.
         savedCategoryValues = new HashMap<String, ArrayList<String>> ();
 
         /* Default config until DB updates the static variable */
-        ArrayList<String> colorsls = getTestColors();
-        ArrayList<String> animalsls = getTestAnimals();
-
-        savedCategoryValues.put("colors", colorsls);
-        savedCategoryValues.put("animals", animalsls);
+//        ArrayList<String> colorsls = getTestColors();
+//        ArrayList<String> animalsls = getTestAnimals();
+//
+//        savedCategoryValues.put("colors", colorsls);
+//        savedCategoryValues.put("animals", animalsls);
 
         //COMPLETED_TODO: Call getCategoryValuesFromDB
         /*Production Configuration */

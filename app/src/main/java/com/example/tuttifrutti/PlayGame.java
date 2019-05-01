@@ -845,6 +845,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         mSecondsLeft = GAME_DURATION;
         mScore = 0;
         categories = GameUtils.getRandomCategories(numberOfCategories);
+        Log.d(TAG,"categories called category 1 =" + categories.get(1));
         currentPlayerScore = -1;
         scoreBoard = new HashMap<String, Integer>();
         //COMPLETED_TODO: Implement scoring
