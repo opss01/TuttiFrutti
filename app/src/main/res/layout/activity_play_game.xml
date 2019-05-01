@@ -134,7 +134,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="Put as many from each category as possible. "
             tools:text="Fill Each Category with the letter: " />
 
         <FrameLayout

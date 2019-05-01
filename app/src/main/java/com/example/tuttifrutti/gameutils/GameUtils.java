@@ -274,13 +274,13 @@ Note: There is some checks in case the list is empty etc.
         //Firebase
 
 
-        readData(new MyCallback() {
-            @Override
-            public void onCallback(Categories value) {
-                Log.d("TAG", value.getCategory());
-                addToHoldValues(value.getCategory());
-            }
-        });
+//        readData(new MyCallback() {
+//            @Override
+//            public void onCallback(Categories value) {
+//                Log.d("TAG", value.getCategory());
+//                addToHoldValues(value.getCategory());
+//            }
+//        });
 
 //                dbRef.child("categories").child("").addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
@@ -309,11 +309,6 @@ Note: There is some checks in case the list is empty etc.
 //            }
 //        });
 
-//        do
-//        {
-//            Log.d(TAG,"omg");
-//        } while (holdValues.size()==0);
-//        holdValues.add("other");
         holdValues.add("Colors");
         holdValues.add("Animals");
 
