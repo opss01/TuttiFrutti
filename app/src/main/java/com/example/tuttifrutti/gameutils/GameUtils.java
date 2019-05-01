@@ -133,6 +133,10 @@ public class GameUtils {
         Log.d(TAG, "Category: " + category);
         Log.d(TAG,"Responses" + responses);
 
+        if (responses.trim().length() < 1) {
+            return 0;
+        }
+
         if (savedCategoryValues != null) {
             ArrayList<String> validList = savedCategoryValues.get(category);
             if (validList != null) {
