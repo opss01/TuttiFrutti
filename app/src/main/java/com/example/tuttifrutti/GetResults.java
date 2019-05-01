@@ -76,7 +76,7 @@ public class GetResults extends AppCompatActivity {
         if (tie) { txt_scorealert.setText("There was a tie!!"); }
         else { txt_scorealert.setText(winner + " won !"); }
 
-        txt_winneralert.setText("You scored " + topScore + "points");
+        txt_winneralert.setText("You scored " + currentPlayerScore + "points");
 
 
         startNewGame.setOnClickListener(
