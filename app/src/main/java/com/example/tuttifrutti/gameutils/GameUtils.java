@@ -143,6 +143,8 @@ public class GameUtils {
                 String[] lines = responses.toLowerCase().split("\\r?\\n");
                 Log.d(TAG, "reading the string " + responses);
                 for (String l: lines) {
+                    Log.d(TAG, "Reading Line " + l);
+                    Log.d(TAG, "First letter of string" + l.charAt(0) + " compare to " + letter);
                     if (l.charAt(0)==letter.toLowerCase().charAt(0) && validList.contains(l)) { score++; }
                 }
             }
