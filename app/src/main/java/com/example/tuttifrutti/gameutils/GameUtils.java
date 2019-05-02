@@ -141,8 +141,9 @@ public class GameUtils {
             ArrayList<String> validList = savedCategoryValues.get(category);
             if (validList != null) {
                 String[] lines = responses.toLowerCase().split("\\r?\\n");
+                Log.d(TAG, "reading the string " + responses);
                 for (String l: lines) {
-                    if (l.charAt(0)==letter.charAt(0) && validList.contains(l)) { score++; }
+                    if (l.charAt(0)==letter.toLowerCase().charAt(0) && validList.contains(l)) { score++; }
                 }
             }
         }
