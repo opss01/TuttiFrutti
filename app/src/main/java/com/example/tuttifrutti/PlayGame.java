@@ -153,6 +153,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
             } else if (msgType == scoreMsgType) {
                 //COMPLETED_TODO: (Ready to Test) Update Scores
                 scoreBoard.put(sender, new Integer(mMsgBuf[1]));
+                Log.d(TAG, "Inserted score into scoreBoard " + mMsgBuf[1] + " for " + sender);
                 if (scoreBoard.keySet().size() == mParticipants.size()) {
                     showResults(); //If we now have both scores, go to ShowResults
                 }
@@ -792,6 +793,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
         currentPlayerScore = GameUtils.getScoreForCategory(category1, category1Response, theletter) +
                                 GameUtils.getScoreForCategory(category2, category2Response, theletter);
         scoreBoard.put(mMyId, new Integer(currentPlayerScore));
+        Log.d(TAG, "Added to scoreBoard (Me): " + mMyId + ", " + currentPlayerScore);
         broadcastScores();
     }
 
