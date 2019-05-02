@@ -152,9 +152,8 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
                 msgAdapter.add(playerName + ": " + msg + '\n');
             } else if (msgType == scoreMsgType) {
                 //COMPLETED_TODO: (Ready to Test) Update Scores
-                String msgBufString = String.valueOf((char) buf[1]) ;
-                Log.d(TAG, "Message Buffer: " + msgBufString);
-                int msgValue = Integer.parseInt(msgBufString);
+                int msgValue = (int) buf[1] ;
+                Log.d(TAG, "Message Buffer: " + buf[0] + msgValue);
                 scoreBoard.put(sender, msgValue);
                 Log.d(TAG, "Inserted score into scoreBoard " + msgValue + " for " + sender);
                 if (scoreBoard.keySet().size() == mParticipants.size()) {
