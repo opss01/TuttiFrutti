@@ -155,7 +155,7 @@ public class PlayGame extends AppCompatActivity implements View.OnClickListener 
                 String msgBufString = new String (mMsgBuf);
                 Log.d(TAG, "Message Buffer: " + msgBufString);
                 int msgValue = Integer.parseInt(msgBufString.substring(1));
-                scoreBoard.put(sender, msgValue));
+                scoreBoard.put(sender, msgValue);
                 Log.d(TAG, "Inserted score into scoreBoard " + msgValue + " for " + sender);
                 if (scoreBoard.keySet().size() == mParticipants.size()) {
                     showResults(); //If we now have both scores, go to ShowResults
